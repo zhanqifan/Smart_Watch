@@ -3,7 +3,9 @@ import { createApp } from 'vue';
 import 'uno.css';
 import '@/assets/styles/index.scss';
 import 'element-plus/theme-chalk/dark/css-vars.css';
-
+import 'amfe-flexible'; //postcss
+import './utils/rem';
+import ECharts from 'vue-echarts';
 // App、router、store
 import App from './App.vue';
 import store from './store';
@@ -46,6 +48,16 @@ app.config.globalProperties.selectDictLabel = selectDictLabel;
 app.config.globalProperties.selectDictLabels = selectDictLabels;
 app.config.globalProperties.animate = animate;
 
+// echart响应式布局
+app.config.globalProperties.$echartsResize = function (chartRef: any) {
+  window.addEventListener('resize', function () {
+    if (chartRef && chartRef.value) {
+      chartRef.value.resize();
+    }
+  });
+};
+
+app.component('v-chart', ECharts);
 app.use(ElementIcons);
 app.use(router);
 app.use(store);
