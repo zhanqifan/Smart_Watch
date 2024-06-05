@@ -1,4 +1,4 @@
-export interface AxiosResponse<T = any> {
+export interface AxiosResponse<T> {
   code: string;
   msg: string;
   data: T;

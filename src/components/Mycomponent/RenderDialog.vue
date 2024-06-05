@@ -2,8 +2,10 @@
 const props=defineProps<{
     title:string
 }>()
+const emit=defineEmits(['send'])
 const isShow = ref(false)
 const sumbit =()=>{
+  emit('send')
 }
 const open =()=>{
     console.log(props.title)
@@ -27,4 +29,8 @@ defineExpose({
   </el-dialog>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.dialog{
+  font-weight: 900;
+}
+</style>

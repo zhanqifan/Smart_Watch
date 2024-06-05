@@ -1,15 +1,44 @@
 <script setup lang="ts">
-import { Plus } from '@element-plus/icons-vue'
-import RenderDialog from '@/components/Mycomponent/RenderDialog.vue';
-const dialogRef = ref()
-const addTraining = () =>{
-  dialogRef.value.open()
+import addTraining from './actualSport/component/addTraining.vue';
+import { getTeamList,getTrainType } from '@/api/daliyManage';
+type Team ={
+  trainingTeamName:string
+  trainingTeamId:string
 }
+type Train ={
+  trainName:string
+  trainId:string
+}
+const options = ref<Team[]>([])
+  const options1 = ref<Train[]>([])
+// 获取训练队列表
+const getTeam =async() =>{
+      const res =await getTeamList()
+      options.value=res.data.map(item => {
+         return {
+          trainingTeamId:item.id,
+          trainingTeamName:item.teamName
+         }
+      });
+    }
+// 获取训练队类型
+const getTrain =async() =>{
+      const res =await getTrainType()
+      options1.value=res.data.map(item => {
+         return {
+          trainId:item.exerciseName,
+          trainName:item.exerciseName
+         }
+      });
+}
+onMounted(()=>{
+  getTeam()
+  getTrain()
+})
 </script>
 <template>
   <div class="main">
-    <el-button type="primary" :icon="Plus" class="btn" round @click="addTraining">添加训练</el-button>
-    <RenderDialog :title="'添加训练'" ref="dialogRef"> </RenderDialog>
+    <addTraining :options="options" :options1="options1" />
   </div>
 </template>
 
@@ -19,10 +48,6 @@ const addTraining = () =>{
    display: flex;
    align-items: center;
    justify-content: center;
-   .btn{
-    width: 30vw;
-    height: 20vh;
-    font-size: 30px;
-   }
+
 }
 </style>

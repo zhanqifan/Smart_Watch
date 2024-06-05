@@ -26,7 +26,14 @@ const queryParams = ref({
         </el-col>
         <el-col :span="9">
           <el-form-item label="训练时间" prop="contactUserName">
-            <el-time-picker v-model="queryParams.dayTime" is-range range-separator="To" start-placeholder="开始时间" end-placeholder="结束" />
+            <el-time-picker
+              v-model="queryParams.dayTime"
+              is-range
+              range-separator="To"
+              arrow-control
+              start-placeholder="开始时间"
+              end-placeholder="结束"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="3" :offset="6">

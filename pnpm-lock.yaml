@@ -62,6 +62,9 @@ dependencies:
   postcss-pxtorem:
     specifier: ^6.1.0
     version: 6.1.0(postcss@8.4.38)
+  reconnecting-websocket:
+    specifier: ^4.4.0
+    version: 4.4.0
   screenfull:
     specifier: 6.0.0
     version: 6.0.0
@@ -4499,6 +4502,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /reconnecting-websocket@4.4.0:
+    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
+    dev: false
 
   /regex-not@1.0.2:
     resolution: {integrity: sha512-J6SDjUgDxQj5NusnOtdFxDwN/+HWykR8GELwctJ7mdqhcyy1xEc4SRFHUXvxTp661YaVKAjfRLZ9cCqS6tn32A==}

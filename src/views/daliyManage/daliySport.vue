@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import SearchTop from './component/searchHeader/SearchTop.vue'
-import TeamSport from './component/teamSport/teamSport.vue';
-import LineEcharts1 from './component/LineEcharts/LineEcharts1.vue';
-import LineEcharts2 from './component/LineEcharts/LineEcharts2.vue';
+import SearchTop from './daliySport/component/searchHeader/SearchTop.vue'
+import TeamSport from './daliySport/component/teamSport/teamSport.vue';
+import LineEcharts1 from './daliySport/component/LineEcharts/LineEcharts1.vue';
+import LineEcharts2 from './daliySport/component/LineEcharts/LineEcharts2.vue';
 import BaseCard from '@/components/Mycomponent/BaseCard.vue';
+import { getUserInfo } from '@/api/user/user';
+onMounted(async()=>{
+  const res = await getUserInfo()
+  console.log(res.data)
+})
 </script>
 <template>
   <div>
@@ -19,7 +24,6 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
           <p class="Team_text">队伍训练情况</p>
           <TeamSport />
         </div>
-
         <div class="data_condition">
           <div class="data_list" v-for="(item,index) in 3" :key="index">
             <p class="data_item">

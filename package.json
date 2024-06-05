@@ -36,6 +36,7 @@
     "path-to-regexp": "6.2.0",
     "pinia": "2.0.22",
     "postcss-pxtorem": "^6.1.0",
+    "reconnecting-websocket": "^4.4.0",
     "screenfull": "6.0.0",
     "vform3-builds": "3.0.8",
     "vue": "3.2.45",

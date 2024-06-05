@@ -8,13 +8,17 @@ function setRem() {
   let currentScale = getWidth / defalutWidth; // 计算当前的屏幕大小和默认宽度之间的比例
 
   // 防止缩放太小
-  if (currentScale < 0.85 && getWidth > 1024) {
-    currentScale = 0.855;
+  if (currentScale < 0.85) {
+    if (getWidth > 1024 && getWidth < 1366) {
+      currentScale = 0.855;
+    } else if (getWidth >= 1366) {
+      console.log('11');
+      currentScale = 1;
+    }
   }
-
   // 当前为平板时
   if (getWidth <= 1024) {
-    defalutFontSize = defalutFontSize * 2;
+    defalutFontSize = defalutFontSize * 1.5;
   }
 
   // 计算的宽度比例关系 再 * 默认的字体大小,获取计算的字体大小
@@ -24,7 +28,6 @@ function setRem() {
 
 // 调用方法
 setRem();
-
 // 监听窗口在变化时重新设置跟文件大小
 window.onresize = function () {
   setRem();

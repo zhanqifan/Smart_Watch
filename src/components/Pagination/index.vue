@@ -27,7 +27,7 @@ import { propTypes } from "@/utils/propTypes";
 const props = defineProps({
     total: propTypes.number,
     page: propTypes.number.def(1),
-    limit: propTypes.number.def(20),
+    limit: propTypes.number.def(10),
     pageSizes: {
       type: Array as PropType<number[]>,
       default: () => [10, 20, 30, 50]

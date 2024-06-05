@@ -1,8 +1,9 @@
 import { createApp } from 'vue';
 // global css
-import 'uno.css';
+
 import '@/assets/styles/index.scss';
 import 'element-plus/theme-chalk/dark/css-vars.css';
+import 'uno.css';
 import 'amfe-flexible'; //postcss
 import './utils/rem';
 import ECharts from 'vue-echarts';
