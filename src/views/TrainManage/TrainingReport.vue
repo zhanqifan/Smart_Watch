@@ -5,11 +5,13 @@ import teamDetail from './component/teamDetail.vue'
 import { getDaliyReport } from '@/api/daliyReport';
 import Pagination from '@/components/Pagination/index.vue'
 const page =ref(1)
+const loading = ref(true)
 const getReport =async() =>{
   const res =await getDaliyReport()
   console.log(res)
   ReportList.value=res.rows
   total.value =res.total
+  loading.value=false
 }
 const ReportList =ref()
 const total =ref()
@@ -21,10 +23,8 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div>
-    <keep-alive include="teamDetail">
-      <teamDetail :ReportList="ReportList" :total="total" />
-    </keep-alive>
+  <div v-loading="loading">
+    <teamDetail :ReportList="ReportList" :total="total" />
     <!-- 分页组件 -->
     <Pagination :total="total" v-model:page="page" @pagination="handlePage" />
   </div>

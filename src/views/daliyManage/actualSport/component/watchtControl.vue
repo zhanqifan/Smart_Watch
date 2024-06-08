@@ -3,6 +3,8 @@ import { getTrainId } from '@/api/daliyManage';
 import { addTeamResponse } from '@/types/daliyManage';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 import { startAtOneButton } from '@/api/daliyManage';
+import { dayjs } from 'element-plus';
+import { resetWatch } from '@/api/daliyManage';
 const options = [
   {
     value: '100',
@@ -22,47 +24,56 @@ const props=defineProps<{
   taskId:any
 }>()
 const list =ref<addTeamResponse>({}) //学生运动实时信息
+const watchOnline = ref({
+  braceletsOnlineNum:0,
+  braceletsTotalNum:0
+})//手表在线信息
+// 基础信息列表
 const getTrainList =async() =>{
   console.log(props.taskId)
   const res =await getTrainId(props.taskId)
-  list.value =res.data
   console.log(res.data)
+  list.value =res.data
 }
-// let ws: ReconnectingWebSocket | null = null;
-// const startWatch = async() =>{
-//   // ws:// 用于不安全的 WebSocket 连接。
-// // wss:// 用于安全的 WebSocket 连接（类似于 HTTPS）。
-// const ws = new ReconnectingWebSocket('ws://localhost:7700/teacher/trainingTask/detectionData');
 
-// ws.onopen = () => {
-//         console.log('WebSocket connected');
-
-//         const params = {
-//             taskId: '1798374432678703106',
-//             studentIds: 1
-//         };
-
-//         ws.send(JSON.stringify(params));
-//     };
-
-//   ws.onmessage = (event) => {
-//      console.log(event)
-//   };
-
-//   ws.onerror = (error) => {
-//     console.error('WebSocket error:', error);
-//   };
-
-//   ws.onclose = () => {
-//     console.log('WebSocket connection closed');
-//   };
-//   }
-const intervalId =ref()
-const gettest = async() =>{
+// 定时器id
+const intervalId =ref<number|null>(null)
+// 开始定时器
+const startInterval = async() =>{
+  if (intervalId.value !== null) {
+    ElMessage.error('请先结束再点击开始')
+    return
+    // clearInterval(intervalId.value); // 避免多次启动定时器
+  }
+  let number=0
   intervalId.value = setInterval(async () => {
-        const res = await startAtOneButton({taskId: '1798374432678703106', studentIds: list.value.students});
+        const res = await startAtOneButton({taskId: '1798374432678703106', studentIds: list.value.students,number:number++});
         console.log(res);
+        list.value.studentInfoList=res.data.taskHealthMetricsVoList
+        watchOnline.value = {braceletsOnlineNum:res.data.braceletsOnlineNum,braceletsTotalNum:res.data.braceletsTotalNum}
     }, 1000); // 每5秒轮询一次
+    ElMessage({
+      type:'success',
+      message:'操作成功'
+    })
+}
+// 结束定时器
+const stopInterval = () => {
+  if (intervalId.value !== null) {
+    clearInterval(intervalId.value);
+    intervalId.value = null;
+    ElMessage({
+      type:'success',
+      message:'结束成功'
+    })
+  }else{
+    ElMessage.error('请先开启一个训练')
+  }
+};
+// 重置心率
+const reset  = async() =>{
+  const res =await resetWatch(props.taskId)
+  console.log(res)
 }
 onMounted(()=>{
   getTrainList()
@@ -71,7 +82,7 @@ onMounted(()=>{
 <template>
   <div>
     <div class="User">
-      <p>{{ list?.exerciseTypeName}}</p>
+      <p>{{ list?.teacherName}}</p>
       <el-form>
         <el-form-item label="运动类型" style="margin-bottom: -3px">
           <el-select v-model="list.exerciseTypeName">
@@ -79,44 +90,44 @@ onMounted(()=>{
           </el-select>
         </el-form-item>
       </el-form>
-      <p>训练时间:00:14:"00"</p>
-      <p>手环链接45/50</p>
+      <p>训练时间:00:00:"00"</p>
+      <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
-        <el-button type="primary" size="large">一键暂停</el-button>
-        <el-button type="primary" size="large" @click="gettest">一键开始</el-button>
-        <el-button type="primary" size="large">一键结束</el-button>
-        <el-button type="primary" size="large">重置</el-button>
+        <el-button type="primary" size="large" @click="stopInterval">一键暂停</el-button>
+        <el-button type="primary" size="large" @click="startInterval">一键开始</el-button>
+        <el-button type="primary" size="large" @click="stopInterval">一键结束</el-button>
+        <el-button type="primary" size="large" @click="reset">重置</el-button>
       </div>
     </div>
     <div class="card-list">
-      <div class="box-card" v-for="i,index in 9" :key="index">
+      <div class="box-card" v-for="i,index in list.studentInfoList" :key="index">
         <div class="top">
-          <div class="my-name">01 蔡徐坤</div>
+          <div class="my-name">{{ i.studentName }}</div>
         </div>
         <div class="content">
           <div class="left">
             <img src="@/assets/images/Oxygen.png" />
             <div class="item-name">实时血氧</div>
           </div>
-          <div class="right">33</div>
+          <div class="right">{{ i.bloodOxygen?i.bloodOxygen:0 }}</div>
         </div>
         <div class="content">
           <div class="left">
             <img src="@/assets/images/hearts.png" />
             <div class="item-name">实时心率</div>
           </div>
-          <div class="right">33</div>
+          <div class="right">{{ i.heartRate?i.heartRate:0 }}</div>
         </div>
         <div class="content">
           <div class="left">
             <img src="@/assets/images/sports.png" />
             <div class="item-name">实时配速</div>
           </div>
-          <div class="right">33</div>
+          <div class="right">{{ i.matchingSpeed?i.matchingSpeed:0 }}</div>
         </div>
         <div class="footer">
-          <p>共计时:3.15</p>
-          <p>组次 2</p>
+          <p>共计时:{{ i.timestamp?dayjs(i.timestamp).format('mm:ss') :0 }}</p>
+          <p>组次 {{i.number}}</p>
         </div>
         <div class="btn">
           <el-button type="warning" plain>暂停</el-button>

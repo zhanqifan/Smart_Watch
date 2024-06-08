@@ -34,10 +34,18 @@ export const getTrainId = (taskId: string) => {
 };
 
 // 一键开始
-export const startAtOneButton = (data) => {
+export const startAtOneButton = (data: object) => {
   return request({
     url: '/teacher/trainingTask/detectionData',
     method: 'POST',
     data
+  });
+};
+
+// 重置
+export const resetWatch = (taskId: string) => {
+  return request({
+    url: `/teacher/trainingTask/reset/${taskId}`,
+    method: 'GET'
   });
 };

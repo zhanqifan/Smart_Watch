@@ -41,6 +41,24 @@ export interface addTeamResponse {
   number: number;
   teacherName: string;
   trainingTime: null;
+  studentInfoList: studenList[];
   students: number[];
   trainingPeopleNumber: null;
+}
+
+interface studenList {
+  bloodOxygen: number;
+  bloodPressure: number;
+  braceletId: number;
+  heartRate: number;
+  id: string;
+  matchingSpeed: number;
+  number: number;
+  studentId: number;
+  studentName: string;
+  taskId: number;
+  timestamp: Date;
+  totalCalories: number;
+  totalDistance: number;
+  totalSteps: number;
 }
