@@ -76,6 +76,7 @@ export const constantRoutes: RouteOption[] = [
       }
     ]
   },
+
   {
     path: '/user',
     component: Layout,

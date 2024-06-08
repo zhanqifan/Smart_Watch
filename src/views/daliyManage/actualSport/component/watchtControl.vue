@@ -28,6 +28,7 @@ const watchOnline = ref({
   braceletsOnlineNum:0,
   braceletsTotalNum:0
 })//手表在线信息
+
 // 基础信息列表
 const getTrainList =async() =>{
   console.log(props.taskId)
@@ -39,24 +40,45 @@ const getTrainList =async() =>{
 // 定时器id
 const intervalId =ref<number|null>(null)
 // 开始定时器
-const startInterval = async() =>{
+const startInterval = async () => {
   if (intervalId.value !== null) {
-    ElMessage.error('请先结束再点击开始')
-    return
-    // clearInterval(intervalId.value); // 避免多次启动定时器
+    ElMessage.error('请先结束再点击开始');
+    clearInterval(intervalId.value); // 避免多次启动定时器
+    return;
   }
-  let number=0
+  let number = 0;
+
   intervalId.value = setInterval(async () => {
-        const res = await startAtOneButton({taskId: '1798374432678703106', studentIds: list.value.students,number:number++});
-        console.log(res);
-        list.value.studentInfoList=res.data.taskHealthMetricsVoList
-        watchOnline.value = {braceletsOnlineNum:res.data.braceletsOnlineNum,braceletsTotalNum:res.data.braceletsTotalNum}
-    }, 1000); // 每5秒轮询一次
-    ElMessage({
-      type:'success',
-      message:'操作成功'
-    })
-}
+    // 处理暂停学生
+    const studentIds = list.value.students.filter(
+      (studentId) => !pausedStudents.value.includes(studentId)
+    );
+    console.log(studentIds)
+    const res = await startAtOneButton({
+      taskId: props.taskId,
+      studentIds: studentIds,
+      number: number++,
+    });
+    console.log(res);
+    // 处理手环掉线  处理方法:只替换有返回的部分
+    res.data.taskHealthMetricsVoList.forEach((newData) => {
+      const existingData = list.value.studentInfoList.find(
+        (item) => item.studentId === newData.studentId
+      );
+      if (existingData) {
+        Object.assign(existingData, newData); // 替换相同项
+      }
+    });
+    watchOnline.value = {
+      braceletsOnlineNum: res.data.braceletsOnlineNum,
+      braceletsTotalNum: res.data.braceletsTotalNum,
+    };
+  }, 1000); // 每1秒轮询一次
+  ElMessage({
+    type: 'success',
+    message: '操作成功',
+  });
+};
 // 结束定时器
 const stopInterval = () => {
   if (intervalId.value !== null) {
@@ -70,11 +92,43 @@ const stopInterval = () => {
     ElMessage.error('请先开启一个训练')
   }
 };
-// 重置心率
+const capacity =ref<number>(100)
+// // 电量块转换
+let batteryChunk= computed(()=>{
+  return findInterval(capacity.value)
+})
+// 电池块显示
+const findInterval = (num: number) => {
+  const intervalSize = 100 / 5;
+  const interval = Math.floor(num / intervalSize);
+  return interval === 5 ? interval : interval + 1;
+};
+// 电量颜色计算
+const getBatteryColor = (num: number) => {
+  const interval = findInterval(num);
+  if (interval >= 0 && interval <= 1) {
+    return '#FE5F69';
+  } else if (interval > 1 && interval <= 4) {
+    return '#FFC95C';
+  } else {
+    return '#64BA8C';
+  }
+};
+
+// 重置
 const reset  = async() =>{
   const res =await resetWatch(props.taskId)
   console.log(res)
 }
+// 存储暂停的学生ID
+const pausedStudents = ref<number[]>([]);
+// 停止当前学生数据更新
+const stopSingle = (studentId: number) => {
+  if (!pausedStudents.value.includes(studentId)) {
+    pausedStudents.value.push(studentId);
+
+  }
+};
 onMounted(()=>{
   getTrainList()
 })
@@ -103,6 +157,17 @@ onMounted(()=>{
       <div class="box-card" v-for="i,index in list.studentInfoList" :key="index">
         <div class="top">
           <div class="my-name">{{ i.studentName }}</div>
+          <!-- 电池 -->
+          <div class="battery-container">
+            <div class="shell">
+              <div
+                v-for="(item, index) in findInterval(i.battery ?? 100)"
+                class="block"
+                :key="index"
+                :style="{ background: getBatteryColor(i.battery ?? 100) }"
+              ></div>
+            </div>
+          </div>
         </div>
         <div class="content">
           <div class="left">
@@ -130,9 +195,9 @@ onMounted(()=>{
           <p>组次 {{i.number}}</p>
         </div>
         <div class="btn">
-          <el-button type="warning" plain>暂停</el-button>
-          <el-button plain>结束</el-button>
-          <el-button type="primary" plain>开始</el-button>
+          <el-button type="warning" plain @click="stopSingle(i)">暂停</el-button>
+          <el-button plain @click="stopSingle(i)">结束</el-button>
+          <el-button type="primary" @click="stopSingle(i)" plain>开始</el-button>
         </div>
       </div>
     </div>
@@ -162,6 +227,7 @@ onMounted(()=>{
         box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
         .top {
         display: flex;
+        align-items: center;
         justify-content: space-between;
       }
       .my-name {
@@ -189,6 +255,11 @@ onMounted(()=>{
       .right {
         font-weight: 700;
         color: #70b605;
+        &.red{
+          color: red;
+          transition: font-size 0.3s ease; /* 过渡动画 */
+          transform: scale(1.5); /* 将字体放大 1.5 倍 */
+        }
       }
       .footer{
         display: flex;
@@ -208,4 +279,41 @@ onMounted(()=>{
 
 
    }
+   .battery-container{
+  width: 68px;
+  height: 34px;
+  border: 4px solid #DFE6EE ;
+  border-radius: 4px;
+  position: relative;
+  transform: scale(0.7);
+  transform-origin: left top;
+  margin-right: 10px;
+  &:after{
+    content: "";
+    display: block;
+    height: 12px;
+    width: 4px;
+    position: absolute;
+    background:#DFE6EE ;
+    right: -8px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+  }
+  // 电池块
+  .shell{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 2px;
+    background: #F8FAFC ;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-column-gap: 2px;
+    .block{
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
 </style>

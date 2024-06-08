@@ -50,7 +50,6 @@ const handleSend = ()=>{
       if(valid){
        const team= props.options.find(item=>item.trainingTeamId===sportForm.value.trainingTeamId)
        const res =await addTrainTest({...sportForm.value,trainingTeamName:team.trainingTeamName})
-       console.log(res.data.id)
        router.push({
         path:'/daliysportmenu/studentsport',
         query:{

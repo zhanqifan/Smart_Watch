@@ -2,20 +2,16 @@
 import { getReportDetail } from '@/api/daliyReport';
 const route = useRoute()
 const router = useRouter()
+const topMessage = ref()//顶部信息
 const getDetail = async() =>{
 const res =await getReportDetail(route.query.taskId)
- console.log(res)
+topMessage.value =res
+    tableData.value =res.data
 }
 const currentPageWidth = ref(window.innerWidth);//页面宽度
-const tableData = [
-{ name: '高启强', averageHeartRate: 155, maxHeartRate: 160, averagePace: 110, maxPace: 110, averageBloodOxygen: 110, maxBloodOxygen: 110, highStartStrong: 155 },
-        { name: '高启盛', averageHeartRate: 155, maxHeartRate: 160, averagePace: 100, maxPace: 100, averageBloodOxygen: 100, maxBloodOxygen: 100, highStartStrong: 155 },
-        { name: '高启兰', averageHeartRate: 155, maxHeartRate: 160, averagePace: 101, maxPace: 101, averageBloodOxygen: 101, maxBloodOxygen: 101, highStartStrong: 155 },
-        { name: '老墨', averageHeartRate: 155, maxHeartRate: 160, averagePace: 101, maxPace: 101, averageBloodOxygen: 101, maxBloodOxygen: 101, highStartStrong: 155 },
-        { name: '安欣', averageHeartRate: 155, maxHeartRate: 160, averagePace: 101, maxPace: 101, averageBloodOxygen: 100, maxBloodOxygen: 100, highStartStrong: 155 }
-]
+const tableData = ref()
 const tableHeaders = [
-  { prop: 'name', label: '姓名' },
+  { prop: 'studentName', label: '姓名' },
   { prop: 'averageHeartRate', label: '平均心率' },
   { prop: 'maxHeartRate', label: '最高心率' },
   { prop: 'averagePace', label: '平均配速' },
@@ -34,11 +30,21 @@ onMounted(()=>{
   <div>
     <div class="top">
       <div class="left_detail">
-        <p>训练队伍名称:<span>1组</span></p>
-        <p>训练类型:<span>100米</span></p>
-        <p>授课老师:<span>张三老师</span></p>
-        <p>训练时间:<span class="">2024-3-24 14:00-15:00 </span></p>
-        <p>受训人数:<span>43</span></p>
+        <p>
+          训练队伍名称:<span>{{topMessage.trainingTeamName}}</span>
+        </p>
+        <p>
+          训练类型:<span>{{topMessage.exerciseTypeName}}米</span>
+        </p>
+        <p>
+          授课老师:<span>{{ topMessage.teacherName }}</span>
+        </p>
+        <p>
+          训练时间:<span class="">{{  topMessage.updateTime }} </span>
+        </p>
+        <p>
+          受训人数:<span>{{ topMessage.number }}</span>
+        </p>
       </div>
       <div>
         <el-button type="primary" @click="goBack">返回</el-button>
