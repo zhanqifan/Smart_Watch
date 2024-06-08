@@ -30,21 +30,11 @@ onMounted(()=>{
   <div>
     <div class="top">
       <div class="left_detail">
-        <p>
-          训练队伍名称:<span>{{topMessage.trainingTeamName}}</span>
-        </p>
-        <p>
-          训练类型:<span>{{topMessage.exerciseTypeName}}米</span>
-        </p>
-        <p>
-          授课老师:<span>{{ topMessage.teacherName }}</span>
-        </p>
-        <p>
-          训练时间:<span class="">{{  topMessage.updateTime }} </span>
-        </p>
-        <p>
-          受训人数:<span>{{ topMessage.number }}</span>
-        </p>
+        <p>训练队伍名称:<span>1组</span></p>
+        <p>训练类型:<span>100米</span></p>
+        <p>授课老师:<span>张三老师</span></p>
+        <p>训练时间:<span class="">2024-3-24 14:00-15:00 </span></p>
+        <p>受训人数:<span>43</span></p>
       </div>
       <div>
         <el-button type="primary" @click="goBack">返回</el-button>
