@@ -4,6 +4,10 @@ import RenderDialog from '@/components/Mycomponent/RenderDialog.vue';
 import { addTrainTest } from '@/api/daliyManage';
 import useUserStore from '@/store/modules/user';
 const router= useRouter()
+const props = defineProps<{
+  options:Array<any>//训练队
+  options1:Array<any>//运动类型
+}>()
 const addTraining = () =>{
   dialogRef.value.open()
 }
@@ -12,10 +16,7 @@ const handleActuall =()=>{
 }
 const user = useUserStore()
 const formRef=ref()
-const props = defineProps<{
-  options:Array<any>
-  options1:Array<any>
-}>()
+
 const dialogRef = ref()
 const sportForm =ref({
   trainingTeamId:'',//训练队id
@@ -23,22 +24,22 @@ const sportForm =ref({
   number:1,//组数
   teacherName:user.nickname//教师姓名
 })
-const options1 = [
-  {
-    value: '100',
-    label: '100米',
-  },
-  {
-    value: '200',
-    label: '200米',
-  },
-  {
-    value: '300',
-    label: '300米',
-  },
+// const options1 = [
+//   {
+//     value: '100',
+//     label: '100米',
+//   },
+//   {
+//     value: '200',
+//     label: '200米',
+//   },
+//   {
+//     value: '300',
+//     label: '300米',
+//   },
 
 
-]
+// ]
 const rules = reactive({
   trainingTeamId:[{ required: true, message: '请选择',trigger: 'change'  }],
   exerciseTypeName: [{ required: true, message: '请选择' ,trigger: 'change'}],
@@ -47,7 +48,9 @@ const rules = reactive({
 })
 const handleSend = ()=>{
     formRef.value.validate(async(valid)=>{
+
       if(valid){
+        dialogRef.value.load(true)
        const team= props.options.find(item=>item.trainingTeamId===sportForm.value.trainingTeamId)
        const res =await addTrainTest({...sportForm.value,trainingTeamName:team.trainingTeamName})
        router.push({
@@ -61,6 +64,7 @@ const handleSend = ()=>{
       else{
         console.log('ERR')
       }
+      dialogRef.value.load(false)
     })
 }
 </script>
@@ -75,7 +79,7 @@ const handleSend = ()=>{
       </el-form-item>
       <el-form-item label="运动类型" prop="exerciseTypeName">
         <el-select v-model="sportForm.exerciseTypeName" filterable placeholder="请选择" size="large" style="width: 100%;">
-          <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value" />
+          <el-option v-for="item in options1" :key="item.value" :label="item.exerciseTypeName" :value="item.exerciseTypeId" />
         </el-select>
       </el-form-item>
       <el-form-item label="组数" prop="number">

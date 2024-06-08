@@ -4,7 +4,7 @@ import { addTeamResponse } from '@/types/daliyManage';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
 import { startAtOneButton } from '@/api/daliyManage';
 import { dayjs } from 'element-plus';
-import { resetWatch } from '@/api/daliyManage';
+// import { resetWatch } from '@/api/daliyManage';
 const options = [
   {
     value: '100',
@@ -24,6 +24,9 @@ const props=defineProps<{
   taskId:any
 }>()
 const list =ref<addTeamResponse>({}) //学生运动实时信息
+const intervalId =ref<number|null>(null)//定时器id
+// 存储暂停的学生ID
+const pausedStudents = ref<number[]>([]);
 const watchOnline = ref({
   braceletsOnlineNum:0,
   braceletsTotalNum:0
@@ -33,58 +36,58 @@ const watchOnline = ref({
 const getTrainList =async() =>{
   console.log(props.taskId)
   const res =await getTrainId(props.taskId)
-
+  console.log(res.data)
   list.value =res.data
 }
 
-// 定时器id
-const intervalId =ref<number|null>(null)
+
 // 开始定时器
-const startInterval = async (studentIds) => {
+const startInterval = async () => {
   if (intervalId.value !== null) {
     ElMessage.error('请先结束再点击开始');
     clearInterval(intervalId.value); // 避免多次启动定时器
     return;
   }
+  let number = 0;
 
-  // let number = 0;
-  if (studentIds === undefined) {
-    studentIds = list.value.students;
-  }
-  // intervalId.value = setInterval(async () => {
+  intervalId.value = setInterval(async () => {
     // 处理暂停学生
     // const studentIds = list.value.students.filter(
     //   (studentId) => !pausedStudents.value.includes(studentId)
     // );
+    const studentIds = list.value.students.filter(
+      (studentId) => !pausedStudents.value.includes(studentId)
+    );
     console.log(studentIds)
-    // const res = await startAtOneButton({
-    //   taskId: props.taskId,
-    //   studentIds: studentIds,
-    //   number: number++,
-    // });
-  //   console.log(res);
-  //   // 处理手环掉线  处理方法:只替换有返回的部分
-  //   res.data.taskHealthMetricsVoList.forEach((newData) => {
-  //     const existingData = list.value.studentInfoList.find(
-  //       (item) => item.studentId === newData.studentId
-  //     );
-  //     if (existingData) {
-  //       Object.assign(existingData, newData); // 替换相同项
-  //     }
-  //   });
-  //   watchOnline.value = {
-  //     braceletsOnlineNum: res.data.braceletsOnlineNum,
-  //     braceletsTotalNum: res.data.braceletsTotalNum,
-  //   };
-  // }, 1000); // 每1秒轮询一次
-  // ElMessage({
-  //   type: 'success',
-  //   message: '操作成功',
-  // });
+    const res = await startAtOneButton({
+      taskId: props.taskId,
+      studentIds: studentIds,
+      number: number++,
+    });
+    console.log(res);
+    // 处理手环掉线  处理方法:只替换有返回的部分
+    res.data.taskHealthMetricsVoList.forEach((newData) => {
+      const existingData = list.value.studentInfoList.find(
+        (item) => item.studentId === newData.studentId
+      );
+      if (existingData) {
+        Object.assign(existingData, newData); // 替换相同项
+      }
+    });
+    watchOnline.value = {
+      braceletsOnlineNum: res.data.braceletsOnlineNum,
+      braceletsTotalNum: res.data.braceletsTotalNum,
+    };
+  }, 1000); // 每1秒轮询一次
+  ElMessage({
+    type: 'success',
+    message: '操作成功',
+  });
 };
 // 结束定时器
-const stopInterval = () => {
+const stopInterval = (control:boolean) => {
   if (intervalId.value !== null) {
+      control?pausedStudents.value=[]:false//结束则情况储存暂停学生的id
     clearInterval(intervalId.value);
     intervalId.value = null;
     ElMessage({
@@ -117,20 +120,40 @@ const reset  = async() =>{
   if(intervalId){
     stopInterval()
   }
+  pausedStudents.value=[]//清空
   getTrainList()//初始化数据
 }
-// 存储暂停的学生ID
-const pausedStudents = ref<number[]>([]);
+
 // 停止当前学生数据更新
 const stopSingle = (studentId: number) => {
+  if(!intervalId.value)return
   if (!pausedStudents.value.includes(studentId)) {
-    pausedStudents.value.push(studentId);
-
-    stopInterval(); // 停止定时器
-    startInterval(pausedStudents.value); // 重新启动定时器
+    pausedStudents.value.push(studentId);//添加需要暂停的学生id
+    stopInterval(false); // 停止定时器
+    startInterval(); // 重新启动定时器
   }
 };
-
+// 心率颜色变化
+const getHeartRateColor = (heartRate:number) => {
+  if ( heartRate >=40 &&heartRate <= 150) {
+    return 'green'; // 绿色
+  } else if (heartRate > 150 && heartRate <= 180) {
+    return 'yellow'; // 黄色
+  } else if (heartRate > 180) {
+    return 'red'; // 红色
+  } else if (heartRate <= 40 || heartRate >= 200) {
+    return 'purple'; // 紫色
+  } else {
+    return ''; // 默认样式
+  }
+};
+// 开始单个学生
+const startSingle = (id:any)=>{
+  if(!intervalId.value)return
+  pausedStudents.value= pausedStudents.value.filter(item=>item!==id)
+  stopInterval(false); // 停止定时器
+  startInterval(); // 重新启动定时器
+}
 onMounted(()=>{
   getTrainList()
 })
@@ -149,9 +172,9 @@ onMounted(()=>{
       <p>训练时间:00:00:"00"</p>
       <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
-        <el-button type="primary" size="large" @click="stopInterval">一键暂停</el-button>
-        <el-button type="primary" size="large" @click="startInterval">一键开始</el-button>
-        <el-button type="primary" size="large" @click="stopInterval">一键结束</el-button>
+        <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button>
+        <el-button type="primary" size="large" @click="startInterval()">一键开始</el-button>
+        <el-button type="primary" size="large" @click="stopInterval(true)">一键结束</el-button>
         <el-button type="primary" size="large" @click="reset">重置</el-button>
       </div>
     </div>
@@ -181,9 +204,9 @@ onMounted(()=>{
         <div class="content">
           <div class="left">
             <img src="@/assets/images/hearts.png" />
-            <div class="item-name">实时心率</div>
+            <div class="item-name ">实时心率</div>
           </div>
-          <div class="right">{{ i.heartRate?i.heartRate:0 }}</div>
+          <div class="right" :class="getHeartRateColor(i.heartRate)">{{ i.heartRate?i.heartRate:0 }}</div>
         </div>
         <div class="content">
           <div class="left">
@@ -199,7 +222,7 @@ onMounted(()=>{
         <div class="btn">
           <el-button type="warning" plain @click="stopSingle(i.studentId)">暂停</el-button>
           <el-button plain @click="stopSingle(i.studentId)">结束</el-button>
-          <el-button type="primary" @click="stopSingle(i.studentId)" plain>开始</el-button>
+          <el-button type="primary" @click="startSingle(i.studentId)" plain>开始</el-button>
         </div>
       </div>
     </div>
@@ -257,11 +280,26 @@ onMounted(()=>{
       .right {
         font-weight: 700;
         color: #70b605;
-        &.red{
-          color: red;
-          transition: font-size 0.3s ease; /* 过渡动画 */
-          transform: scale(1.5); /* 将字体放大 1.5 倍 */
-        }
+        font-size: 20px;
+        &.green {
+    color: #70B605;
+    transition: font-size 0.3s ease; /* 过渡动画 */
+  }
+  &.yellow {
+    color: yellow;
+    transition: font-size 0.3s ease; /* 过渡动画 */
+    transform: scale(1.5); /* 将字体放大 1.5 倍 */
+  }
+  &.red {
+    color: red;
+    transition: font-size 0.3s ease; /* 过渡动画 */
+    transform: scale(1.5); /* 将字体放大 1.5 倍 */
+  }
+  &.purple {
+    color: purple;
+    transition: font-size 0.3s ease; /* 过渡动画 */
+    transform: scale(1.5); /* 将字体放大 1.5 倍 */
+  }
       }
       .footer{
         display: flex;

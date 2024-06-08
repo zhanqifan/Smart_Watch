@@ -5,8 +5,8 @@
     <top-nav id="topmenu-container" class="topmenu-container" v-if="settingsStore.topNav" />
 
     <div class="right-menu flex align-center">
-      <template v-if="appStore.device !== 'mobile'">
-        <el-select
+      <!-- <template v-if="appStore.device !== 'mobile'"> -->
+      <!-- <el-select
           v-model="companyName"
           clearable
           filterable
@@ -20,14 +20,14 @@
           <template #prefix><svg-icon icon-class="company" class="el-input__icon input-icon" /></template>
         </el-select>
 
-        <!-- <header-search id="header-search" class="right-menu-item" /> -->
-        <search-menu ref="searchMenuRef" />
+        <header-search id="header-search" class="right-menu-item" /> -->
+      <!-- <search-menu ref="searchMenuRef" />
         <el-tooltip content="搜索" effect="dark" placement="bottom">
           <div class="right-menu-item hover-effect" @click="openSearchMenu">
             <svg-icon class-name="search-icon" icon-class="search" />
           </div>
         </el-tooltip>
-        <!-- 消息 -->
+        消息
         <el-tooltip :content="$t('navbar.message')" effect="dark" placement="bottom">
           <div>
             <el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
@@ -41,8 +41,8 @@
               </template>
             </el-popover>
           </div>
-        </el-tooltip>
-        <el-tooltip content="Github" effect="dark" placement="bottom">
+        </el-tooltip> -->
+      <!-- <el-tooltip content="Github" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
         </el-tooltip>
 
@@ -60,8 +60,8 @@
 
         <el-tooltip :content="$t('navbar.layoutSize')" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template>
+        </el-tooltip> -->
+      <!-- </template> -->
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
           <div class="avatar-wrapper">

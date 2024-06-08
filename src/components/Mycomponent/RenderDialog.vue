@@ -2,6 +2,7 @@
 const props=defineProps<{
     title:string
 }>()
+const loading= ref(false)
 const emit=defineEmits(['send'])
 const isShow = ref(false)
 const sumbit =()=>{
@@ -11,9 +12,11 @@ const open =()=>{
     console.log(props.title)
     isShow.value=true
 }
-
+const load = (type) =>{
+  loading.value=type
+}
 defineExpose({
-    open
+    open,load
 })
 </script>
 <template>
@@ -23,7 +26,7 @@ defineExpose({
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="isShow = false">取消</el-button>
-        <el-button type="primary" @click="sumbit"> 确认</el-button>
+        <el-button type="primary" @click="sumbit" :loading="loading"> 确认</el-button>
       </div>
     </template>
   </el-dialog>

@@ -6,8 +6,8 @@ type Team ={
   trainingTeamId:string
 }
 type Train ={
-  trainName:string
-  trainId:string
+  exerciseTypeName:string
+  exerciseTypeId:string
 }
 const options = ref<Team[]>([])
   const options1 = ref<Train[]>([])
@@ -24,10 +24,11 @@ const getTeam =async() =>{
 // 获取训练队类型
 const getTrain =async() =>{
       const res =await getTrainType()
+      console.log(res)
       options1.value=res.data.map(item => {
          return {
-          trainId:item.exerciseName,
-          trainName:item.exerciseName
+          exerciseTypeId:item.exerciseName,
+          exerciseTypeName:item.exerciseName
          }
       });
 }

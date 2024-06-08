@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { getReportDetail } from '@/api/daliyReport';
+import { FullDetailsReportVoList } from '@/types/daliyReport';
 const route = useRoute()
 const router = useRouter()
-const topMessage = ref()//顶部信息
+const headerInfo = ref()//顶部信息
 const getDetail = async() =>{
 const res =await getReportDetail(route.query.taskId)
-topMessage.value =res
-    tableData.value =res.data
+console.log(res.data)
+    headerInfo.value =res.data
+    tableData.value =res.data.fullDetailsReportVoList
 }
 const currentPageWidth = ref(window.innerWidth);//页面宽度
-const tableData = ref()
+const tableData = ref<FullDetailsReportVoList[]>()
 const tableHeaders = [
   { prop: 'studentName', label: '姓名' },
   { prop: 'averageHeartRate', label: '平均心率' },
@@ -30,11 +32,21 @@ onMounted(()=>{
   <div>
     <div class="top">
       <div class="left_detail">
-        <p>训练队伍名称:<span>1组</span></p>
-        <p>训练类型:<span>100米</span></p>
-        <p>授课老师:<span>张三老师</span></p>
-        <p>训练时间:<span class="">2024-3-24 14:00-15:00 </span></p>
-        <p>受训人数:<span>43</span></p>
+        <p>
+          训练队伍名称:<span>{{headerInfo?.trainingName}}</span>
+        </p>
+        <p>
+          训练类型:<span>{{headerInfo?.trainingType}}</span>
+        </p>
+        <p>
+          授课老师:<span>{{headerInfo?.teacherName}}老师</span>
+        </p>
+        <p>
+          训练时间:<span class="">{{ headerInfo?.trainingDate }}</span>
+        </p>
+        <p>
+          受训人数:<span>{{headerInfo?.personNum }}</span>
+        </p>
       </div>
       <div>
         <el-button type="primary" @click="goBack">返回</el-button>

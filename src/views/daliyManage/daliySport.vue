@@ -4,11 +4,11 @@ import TeamSport from './daliySport/component/teamSport/teamSport.vue';
 import LineEcharts1 from './daliySport/component/LineEcharts/LineEcharts1.vue';
 import LineEcharts2 from './daliySport/component/LineEcharts/LineEcharts2.vue';
 import BaseCard from '@/components/Mycomponent/BaseCard.vue';
-import { getUserInfo } from '@/api/user/user';
-onMounted(async()=>{
-  const res = await getUserInfo()
-  console.log(res.data)
-})
+// import { getUserInfo } from '@/api/user/user';
+// onMounted(async()=>{
+//   const res = await getUserInfo()
+//   console.log(res.data)
+// })
 </script>
 <template>
   <div>

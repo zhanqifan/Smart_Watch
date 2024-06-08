@@ -1,36 +1,44 @@
 <template>
-  <div class="p-2">
+  <div>
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div class="search" v-show="showSearch">
-        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
-          <el-form-item label="学生姓名" prop="name">
-            <el-input v-model="queryParams.name" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
-          </el-form-item>
-          <el-form-item label="手环ID" prop="uuid">
-            <el-input v-model="queryParams.uuid" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
-          </el-form-item>
-          <el-form-item label="学号" prop="studentNumber">
-            <el-input v-model="queryParams.studentNumber" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-form-item>
+      <div class="search_group" v-show="showSearch">
+        <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px" class="search-form">
+          <div class="input-group">
+            <el-form-item label="学生姓名" prop="name">
+              <el-input v-model="queryParams.name" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
+            </el-form-item>
+            <el-form-item label="手环ID" prop="uuid">
+              <el-input v-model="queryParams.uuid" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
+            </el-form-item>
+            <el-form-item label="学号" prop="studentNumber">
+              <el-input v-model="queryParams.studentNumber" placeholder="请输入" clearable style="width: 240px" @keyup.enter="handleQuery" />
+            </el-form-item>
+          </div>
+          <div class="button-group">
+            <el-form-item>
+              <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+              <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            </el-form-item>
+          </div>
         </el-form>
       </div>
     </transition>
 
     <el-card shadow="never">
       <template #header>
-        <el-row :gutter="10" class="mb8">
+        <el-row :gutter="10">
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:studentInfo:add']">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:studentInfo:edit']">修改</el-button>
+            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:studentInfo:edit']"
+              >修改</el-button
+            >
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:studentInfo:remove']">删除</el-button>
+            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:studentInfo:remove']"
+              >删除</el-button
+            >
           </el-col>
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:studentInfo:export']">导出</el-button>
@@ -57,13 +65,7 @@
         </el-table-column>
       </el-table>
 
-      <pagination
-          v-show="total>0"
-          :total="total"
-          v-model:page="queryParams.pageNum"
-          v-model:limit="queryParams.pageSize"
-          @pagination="getList"
-      />
+      <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
     <!-- 添加或修改学生信息对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
@@ -240,3 +242,35 @@ onMounted(() => {
   getList();
 });
 </script>
+<style lang="scss" scoped>
+.search_group {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .search-form {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+
+    .el-form-item {
+      margin-right: 10px;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+
+    .el-form-item {
+      margin-right: 0; // Remove margin for the last item
+    }
+  }
+}
+</style>

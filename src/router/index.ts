@@ -66,13 +66,13 @@ export const constantRoutes: RouteOption[] = [
   {
     path: '',
     component: Layout,
-    redirect: '/index',
+    redirect: '/daliysportmenu/daliysport',
     children: [
       {
-        path: '/index',
-        component: () => import('@/views/index.vue'),
-        name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        path: '/daliysportmenu/daliysport',
+        component: () => import('@/views/daliyManage/daliySport.vue'),
+        name: 'Index'
+        // meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
   },
