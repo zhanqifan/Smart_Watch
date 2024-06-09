@@ -2,7 +2,7 @@
 import { getTrainId } from '@/api/daliyManage';
 import { addTeamResponse } from '@/types/daliyManage';
 // import ReconnectingWebSocket from 'reconnecting-websocket';
-import { startAtOneButton } from '@/api/daliyManage';
+import { startAtOneButton,resetWatch } from '@/api/daliyManage';
 import { dayjs } from 'element-plus';
 // import { resetWatch } from '@/api/daliyManage';
 const options = [
@@ -118,10 +118,12 @@ const getBatteryColor = (num: number) => {
 // 重置
 const reset  = async() =>{
   if(intervalId){
-    stopInterval()
+    stopInterval(false)
   }
   pausedStudents.value=[]//清空
-  getTrainList()//初始化数据
+  const res =await resetWatch(props.taskId)
+  console.log(res)
+  // getTrainList()//初始化数据
 }
 
 // 停止当前学生数据更新
