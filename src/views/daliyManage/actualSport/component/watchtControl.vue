@@ -123,7 +123,7 @@ const reset  = async() =>{
   pausedStudents.value=[]//清空
   const res =await resetWatch(props.taskId)
   console.log(res)
-  // getTrainList()//初始化数据
+  getTrainList()//初始化数据
 }
 
 // 停止当前学生数据更新
@@ -201,7 +201,7 @@ onMounted(()=>{
             <img src="@/assets/images/Oxygen.png" />
             <div class="item-name">实时血氧</div>
           </div>
-          <div class="right">{{ i.bloodOxygen?i.bloodOxygen:0 }}</div>
+          <div class="right" :class="getHeartRateColor(i.bloodOxygen)">{{ i.bloodOxygen?i.bloodOxygen:0 }}</div>
         </div>
         <div class="content">
           <div class="left">
@@ -215,7 +215,7 @@ onMounted(()=>{
             <img src="@/assets/images/sports.png" />
             <div class="item-name">实时配速</div>
           </div>
-          <div class="right">{{ i.matchingSpeed?i.matchingSpeed:0 }}</div>
+          <div class="right" :class="getHeartRateColor(i.matchingSpeed)">{{ i.matchingSpeed?i.matchingSpeed:0 }}</div>
         </div>
         <div class="footer">
           <p>共计时:{{ i.timestamp?dayjs(i.timestamp).format('mm:ss') :0 }}</p>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getReportDetail } from '@/api/daliyReport';
+import { exportReport } from '@/api/daliyManage';
 import { FullDetailsReportVoList } from '@/types/daliyReport';
 const route = useRoute()
 const router = useRouter()
@@ -24,6 +25,10 @@ const tableHeaders = [
 const goBack = () => {
   router.go(-1); // 路由页面回退
 };
+// const exportRe = async() =>{
+//   const res =await exportReport(route.query.taskId)
+//   console.log(res)
+// }
 onMounted(()=>{
   getDetail()
 })
@@ -50,7 +55,7 @@ onMounted(()=>{
       </div>
       <div>
         <el-button type="primary" @click="goBack">返回</el-button>
-        <el-button type="primary">导出报告</el-button>
+        <!-- <el-button type="primary" @click="exportRe">导出报告</el-button> -->
       </div>
     </div>
     <div>

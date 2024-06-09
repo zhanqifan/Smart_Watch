@@ -49,3 +49,10 @@ export const resetWatch = (taskId: string) => {
     method: 'GET'
   });
 };
+// 导出报告
+export const exportReport = (taskId: string) => {
+  return request({
+    url: `/teacher/training/report/exportFullDetails/${taskId}`,
+    method: 'POST'
+  });
+};
