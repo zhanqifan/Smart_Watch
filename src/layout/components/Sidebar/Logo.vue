@@ -35,7 +35,7 @@ defineProps({
     }
 })
 
-const title = ref('intelligentsports');
+const title = ref('智慧体育系统');
 const settingsStore = useSettingsStore();
 const sideTheme = computed(() => settingsStore.sideTheme);
 </script>

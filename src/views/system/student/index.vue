@@ -233,7 +233,7 @@ const handleDelete = async (row?: StudentInfoVO) => {
 
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download('system/studentInfo/export', {
+  proxy?.download('teacher/studentInfo/export', {
     ...queryParams.value
   }, `studentInfo_${new Date().getTime()}.xlsx`)
 }

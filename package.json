@@ -1,7 +1,7 @@
 {
-  "name": "intelligentsports",
+  "name": "智慧体育系统",
   "version": "5.1.2",
-  "description": "intelligentsports多租户管理系统",
+  "description": "智慧体育系统",
   "author": "LionLi",
   "license": "MIT",
   "scripts": {
