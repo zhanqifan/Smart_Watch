@@ -73,6 +73,9 @@ function handleCurrentChange(val: number) {
         scrollTo(0, 800)
     }
 }
+// function resetPagegation =  () =>{
+
+// }
 </script>
 
 <style lang="scss" scoped>

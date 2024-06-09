@@ -61,3 +61,11 @@ export const delStudentInfo = (id: string | number | Array<string | number>) => 
     method: 'delete'
   });
 };
+
+// 导入模版
+export const expoetTemplate = () => {
+  return request({
+    method: 'POST',
+    url: '/teacher/studentInfo/importTemplate'
+  });
+};

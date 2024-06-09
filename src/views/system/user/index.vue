@@ -1,12 +1,11 @@
 <template>
-  <div class="p-2">
+  <div>
     <el-row :gutter="20">
       <!-- 部门树 -->
       <el-col :lg="4" :xs="24" style="">
         <el-card shadow="hover">
           <el-input v-model="deptName" placeholder="请输入部门名称" prefix-icon="Search" clearable />
           <el-tree
-            class="mt-2"
             ref="deptTreeRef"
             node-key="id"
             :data="deptOptions"
@@ -320,7 +319,7 @@ const total = ref(0);
 const dateRange = ref<[DateModelType, DateModelType]>(['', '']);
 const deptName = ref('');
 const deptOptions = ref<DeptVO[]>([]);
-const initPassword = ref<String>('');
+const initPassword = ref<string>('');
 const postOptions = ref<PostVO[]>([]);
 const roleOptions = ref<RoleVO[]>([]);
 /*** 用户导入参数 */

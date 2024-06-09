@@ -57,7 +57,17 @@ const search = () =>{
   emit('search',queryParams.value)
 }
 const reset = () =>{
-  emit('reset',queryParams.value)
+  queryParams.value = ({
+   trainingTeamName:"",
+   dayTime:"",
+   exerciseTypeName:"",
+  //  data:dayjs().format('YYYY-MM-DD'),
+   time:[
+   dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+   dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')    // 当天的 24 点
+],
+  })
+  emit('reset')
 }
 onMounted(()=>{
   getTeam()
@@ -116,7 +126,7 @@ onMounted(()=>{
           训练人数:<span>{{item.personNum??0}}人</span>
         </p>
         <p>
-          运动类型:<span>{{ item.exerciseTypeName }}米</span>
+          运动类型:<span>{{ item.exerciseTypeName }}</span>
         </p>
         <p>
           教师名称:<span class="">{{ item.teacherName }}</span>

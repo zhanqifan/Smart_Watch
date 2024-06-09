@@ -1,7 +1,7 @@
 <template>
-  <div class="p-2">
+  <div>
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div class="mb-[10px]" v-show="showSearch">
+      <div class="" v-show="showSearch">
         <el-card shadow="hover">
           <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
             <el-form-item label="文件名" prop="fileName">
@@ -27,7 +27,7 @@
             <el-form-item label="服务商" prop="service">
               <el-input v-model="queryParams.service" placeholder="请输入服务商" clearable style="width: 200px" @keyup.enter="handleQuery" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="ml-[15px]">
               <el-button type="primary" icon="search" @click="handleQuery">搜索</el-button>
               <el-button icon="Refresh" @click="resetQuery">重置</el-button>
             </el-form-item>
@@ -38,7 +38,7 @@
 
     <el-card shadow="hover">
       <template #header>
-        <el-row :gutter="10" class="mb8">
+        <el-row :gutter="10">
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Upload" @click="handleFile" v-hasPermi="['system:oss:upload']">上传文件</el-button>
           </el-col>

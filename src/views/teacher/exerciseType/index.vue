@@ -1,7 +1,7 @@
 <template>
-  <div class="p-2">
+  <div>
     <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div class="search" v-show="showSearch">
+      <div class="input_Search" v-show="showSearch">
         <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
           <el-form-item label="运动名称" prop="exerciseName">
             <el-input v-model="queryParams.exerciseName" placeholder="请输入运动名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
@@ -19,15 +19,19 @@
 
     <el-card shadow="never">
       <template #header>
-        <el-row :gutter="10" class="mb8">
+        <el-row :gutter="10">
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['teacher:exerciseType:add']">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['teacher:exerciseType:edit']">修改</el-button>
+            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['teacher:exerciseType:edit']"
+              >修改</el-button
+            >
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['teacher:exerciseType:remove']">删除</el-button>
+            <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['teacher:exerciseType:remove']"
+              >删除</el-button
+            >
           </el-col>
           <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['teacher:exerciseType:export']">导出</el-button>
@@ -55,13 +59,7 @@
         </el-table-column>
       </el-table>
 
-      <pagination
-          v-show="total>0"
-          :total="total"
-          v-model:page="queryParams.pageNum"
-          v-model:limit="queryParams.pageSize"
-          @pagination="getList"
-      />
+      <pagination v-show="total>0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
     </el-card>
     <!-- 添加或修改运动类型对话框 -->
     <el-dialog :title="dialog.title" v-model="dialog.visible" width="500px" append-to-body>
@@ -73,7 +71,7 @@
           <el-input v-model="form.number" placeholder="请输入组数" />
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
-            <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="租户号" prop="tenantId">
           <el-input v-model="form.tenantId" placeholder="请输入租户号" />
@@ -243,3 +241,8 @@ onMounted(() => {
   getList();
 });
 </script>
+<style lang="scss">
+.input_Search{
+  padding-top: 20px;
+}
+</style>
