@@ -33,7 +33,7 @@ export const getTrainingTeam = (id: string | number): AxiosPromise<TrainingTeamV
  */
 export const addTrainingTeam = (data: TrainingTeamForm) => {
   return request({
-    url: '/teacher/trainingTeam',
+    url: '/teacher/trainingTeam/add',
     method: 'post',
     data: data
   });

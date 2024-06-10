@@ -33,7 +33,7 @@ export const getExerciseType = (id: string | number): AxiosPromise<ExerciseTypeV
  */
 export const addExerciseType = (data: ExerciseTypeForm) => {
   return request({
-    url: '/teacher/exerciseType',
+    url: '/teacher/exerciseType/add',
     method: 'post',
     data: data
   });
