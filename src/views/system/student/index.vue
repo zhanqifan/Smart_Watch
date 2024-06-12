@@ -94,7 +94,7 @@
 <script setup name="StudentInfo" lang="ts">
 import { listStudentInfo, getStudentInfo, delStudentInfo, addStudentInfo, updateStudentInfo,expoetTemplate } from '@/api/system/studentInfo';
 import { StudentInfoVO, StudentInfoQuery, StudentInfoForm } from '@/api/system/studentInfo/types';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 
