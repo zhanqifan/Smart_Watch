@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getReportDetail } from '@/api/daliyReport';
-import { exportReport } from '@/api/daliyManage';
 import { FullDetailsReportVoList } from '@/types/daliyReport';
 const route = useRoute()
 const router = useRouter()

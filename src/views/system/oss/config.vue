@@ -32,7 +32,9 @@
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:ossConfig:add']">新增</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:ossConfig:edit']">修改</el-button>
+            <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:ossConfig:edit']"
+              >修改</el-button
+            >
           </el-col>
           <el-col :span="1.5">
             <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:ossConfig:remove']">

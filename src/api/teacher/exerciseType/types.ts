@@ -23,7 +23,6 @@ export interface ExerciseTypeVO {
    * 租户号
    */
   tenantId: string | number;
-
 }
 
 export interface ExerciseTypeForm extends BaseEntity {
@@ -51,11 +50,9 @@ export interface ExerciseTypeForm extends BaseEntity {
    * 租户号
    */
   tenantId?: string | number;
-
 }
 
 export interface ExerciseTypeQuery extends PageQuery {
-
   /**
    * 运动名称
    */
@@ -76,11 +73,8 @@ export interface ExerciseTypeQuery extends PageQuery {
    */
   tenantId?: string | number;
 
-    /**
-     * 日期范围参数
-     */
-    params?: any;
+  /**
+   * 日期范围参数
+   */
+  params?: any;
 }
-
-
-

@@ -40,7 +40,7 @@ const getTeam =async() =>{
 // }
 
 const router= useRouter()
-const props=defineProps<{
+defineProps<{
   ReportList:Array<addTeamResponse>
 }>()
 // 查看详情

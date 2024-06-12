@@ -63,7 +63,6 @@
 <script setup name="Online" lang="ts">
 import { forceLogout, list as initData } from "@/api/monitor/online";
 import { OnlineQuery, OnlineVO } from "@/api/monitor/online/types";
-import api from "@/api/system/user";
 import {to} from "await-to-js";
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;

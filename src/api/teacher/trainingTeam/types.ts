@@ -8,7 +8,6 @@ export interface TrainingTeamVO {
    * 训练队名
    */
   teamName: string;
-
 }
 
 export interface TrainingTeamForm extends BaseEntity {
@@ -21,21 +20,16 @@ export interface TrainingTeamForm extends BaseEntity {
    * 训练队名
    */
   teamName?: string;
-
 }
 
 export interface TrainingTeamQuery extends PageQuery {
-
   /**
    * 训练队名
    */
   teamName?: string;
 
-    /**
-     * 日期范围参数
-     */
-    params?: any;
+  /**
+   * 日期范围参数
+   */
+  params?: any;
 }
-
-
-

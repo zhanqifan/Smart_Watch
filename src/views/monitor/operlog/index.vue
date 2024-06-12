@@ -5,7 +5,7 @@
         <el-card shadow="hover">
           <el-form :model="queryParams" ref="queryFormRef" :inline="true" label-width="68px">
             <el-form-item label="操作地址" prop="operIp">
-              <el-input v-model="queryParams.operIp" placeholder="请输入操作地址" clearable style="width: 240px;" @keyup.enter="handleQuery"/>
+              <el-input v-model="queryParams.operIp" placeholder="请输入操作地址" clearable style="width: 240px;" @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="系统模块" prop="title">
               <el-input v-model="queryParams.title" placeholder="请输入系统模块" clearable style="width: 240px;" @keyup.enter="handleQuery" />
