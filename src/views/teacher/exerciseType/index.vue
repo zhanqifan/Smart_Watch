@@ -6,9 +6,9 @@
           <el-form-item label="运动名称" prop="exerciseName">
             <el-input v-model="queryParams.exerciseName" placeholder="请输入运动名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
           </el-form-item>
-          <el-form-item label="组数" prop="number">
+          <!-- <el-form-item label="组数" prop="number">
             <el-input v-model="queryParams.number" placeholder="请输入组数" clearable style="width: 240px" @keyup.enter="handleQuery" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
@@ -23,7 +23,7 @@
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
           </el-col>
-          <el-col :span="1.5">
+          <!-- <el-col :span="1.5">
             <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()"
               >修改</el-button
             >
@@ -32,10 +32,10 @@
             <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()"
               >删除</el-button
             >
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="warning" plain icon="Download" @click="handleExport" >导出</el-button>
-          </el-col>
+          </el-col> -->
+          <!-- <el-col :span="1.5">
+            <el-button type="warning" plain icon="Download" @click="handleExport">导出</el-button>
+          </el-col> -->
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
       </template>
@@ -44,7 +44,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="唯一标识" align="center" prop="id" v-if="true" />
         <el-table-column label="运动名称" align="center" prop="exerciseName" />
-        <el-table-column label="组数" align="center" prop="number" />
+        <!-- <el-table-column label="组数" align="center" prop="number" /> -->
         <el-table-column label="备注" align="center" prop="remarks" />
         <el-table-column label="租户号" align="center" prop="tenantId" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -67,9 +67,9 @@
         <el-form-item label="运动名称" prop="exerciseName">
           <el-input v-model="form.exerciseName" placeholder="请输入运动名称" />
         </el-form-item>
-        <el-form-item label="组数" prop="number">
+        <!-- <el-form-item label="组数" prop="number">
           <el-input v-model="form.number" placeholder="请输入组数" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="备注" prop="remarks">
           <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -113,7 +113,7 @@ const dialog = reactive<DialogOption>({
 const initFormData: ExerciseTypeForm = {
   id: undefined,
   exerciseName: undefined,
-  number: undefined,
+  number: 1,
   remarks: undefined,
   tenantId: undefined,
 }
@@ -123,7 +123,6 @@ const data = reactive<PageData<ExerciseTypeForm, ExerciseTypeQuery>>({
     pageNum: 1,
     pageSize: 10,
     exerciseName: undefined,
-    number: undefined,
     remarks: undefined,
     tenantId: undefined,
     params: {
@@ -197,11 +196,12 @@ const handleAdd = () => {
 /** 修改按钮操作 */
 const handleUpdate = async (row?: ExerciseTypeVO) => {
   reset();
-  const _id = row?.id || ids.value[0]
-  const res = await getExerciseType(_id);
-  Object.assign(form.value, res.data);
+  // const _id = row?.id || ids.value[0]
+  // const res = await getExerciseType(_id);
+  // Object.assign(form.value, res.data);
   dialog.visible = true;
   dialog.title = "修改运动类型";
+  form.value={...row}
 }
 
 /** 提交按钮 */
@@ -224,6 +224,7 @@ const submitForm = () => {
 /** 删除按钮操作 */
 const handleDelete = async (row?: ExerciseTypeVO) => {
   const _ids = row?.id || ids.value;
+  // const idList = [_ids]
   await proxy?.$modal.confirm('是否确认删除运动类型编号为"' + _ids + '"的数据项？').finally(() => loading.value = false);
   await delExerciseType(_ids);
   proxy?.$modal.msgSuccess("删除成功");
@@ -232,7 +233,7 @@ const handleDelete = async (row?: ExerciseTypeVO) => {
 
 /** 导出按钮操作 */
 const handleExport = () => {
-  proxy?.download('teacher/exerciseType/export', {
+  proxy?.download('/teacher/studentInfo/export', {
     ...queryParams.value
   }, `exerciseType_${new Date().getTime()}.xlsx`)
 }

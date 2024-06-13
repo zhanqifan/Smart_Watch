@@ -23,6 +23,7 @@ const options = [
 const props=defineProps<{
   taskId:any
 }>()
+const router = useRouter()
 const list =ref<addTeamResponse>({}) //学生运动实时信息
 const intervalId =ref<number|null>(null)//定时器id
 // 存储暂停的学生ID
@@ -94,6 +95,13 @@ const stopInterval = (control:boolean) => {
       type:'success',
       message:'操作成功'
     })
+    router.push({
+    path:'/trainmanage/datalist',
+    query:{
+      taskId:props.taskId
+    }
+  })
+    reset()
   }
 };
 
@@ -127,14 +135,14 @@ const reset  = async() =>{
 }
 
 // 停止当前学生数据更新
-const stopSingle = (studentId: number) => {
-  if(!intervalId.value)return
-  if (!pausedStudents.value.includes(studentId)) {
-    pausedStudents.value.push(studentId);//添加需要暂停的学生id
-    stopInterval(false); // 停止定时器
-    startInterval(); // 重新启动定时器
-  }
-};
+// const stopSingle = (studentId: number) => {
+//   if(!intervalId.value)return
+//   if (!pausedStudents.value.includes(studentId)) {
+//     pausedStudents.value.push(studentId);//添加需要暂停的学生id
+//     stopInterval(false); // 停止定时器
+//     startInterval(); // 重新启动定时器
+//   }
+// };
 // 心率颜色变化
 const getHeartRateColor = (heartRate:number) => {
   if ( heartRate >=40 &&heartRate <= 150) {
@@ -149,14 +157,29 @@ const getHeartRateColor = (heartRate:number) => {
     return ''; // 默认样式
   }
 };
-// 开始单个学生
-const startSingle = (id:any)=>{
-  if(!intervalId.value)return
-  pausedStudents.value= pausedStudents.value.filter(item=>item!==id)
-  stopInterval(false); // 停止定时器
-  startInterval(); // 重新启动定时器
-}
+// // 开始单个学生
+// const startSingle = (id:any)=>{
+//   if(!intervalId.value)return
+//   pausedStudents.value= pausedStudents.value.filter(item=>item!==id)
+//   stopInterval(false); // 停止定时器
+//   startInterval(); // 重新启动定时器
+// }
+const screenWidth = ref(window.innerWidth);
+
+// 监听窗口大小变化
+window.addEventListener('resize', () => {
+  screenWidth.value = window.innerWidth;
+});
+
+// 根据屏幕宽度决定卡片列表的布局样式
+const cardListStyle = ref({
+  display: screenWidth.value < 750 ? 'block' : 'grid',
+  gridTemplateColumns: screenWidth.value < 750 ? '1fr' : 'repeat(3, 1fr)',
+  paddingBottom :screenWidth.value < 750 ? '30px' : '',
+})
+
 onMounted(()=>{
+
   getTrainList()
 })
 </script>
@@ -171,16 +194,15 @@ onMounted(()=>{
           </el-select>
         </el-form-item>
       </el-form>
-      <p>训练时间:00:00:"00"</p>
       <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
-        <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button>
+        <!-- <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button> -->
         <el-button type="primary" size="large" @click="startInterval()">一键开始</el-button>
         <el-button type="primary" size="large" @click="stopInterval(true)">一键结束</el-button>
         <el-button type="primary" size="large" @click="reset">重置</el-button>
       </div>
     </div>
-    <div class="card-list">
+    <div class="card-list" :style="cardListStyle">
       <div class="box-card" v-for="i,index in list.studentInfoList" :key="index">
         <div class="top">
           <div class="my-name">{{ i.studentName }}</div>
@@ -196,13 +218,13 @@ onMounted(()=>{
             </div>
           </div>
         </div>
-        <div class="content">
+        <!-- <div class="content">
           <div class="left">
             <img src="@/assets/images/Oxygen.png" />
             <div class="item-name">实时血氧</div>
           </div>
           <div class="right" :class="getHeartRateColor(i.bloodOxygen)">{{ i.bloodOxygen?i.bloodOxygen:0 }}</div>
-        </div>
+        </div> -->
         <div class="content">
           <div class="left">
             <img src="@/assets/images/hearts.png" />
@@ -210,149 +232,169 @@ onMounted(()=>{
           </div>
           <div class="right" :class="getHeartRateColor(i.heartRate)">{{ i.heartRate?i.heartRate:0 }}</div>
         </div>
-        <div class="content">
+        <!-- <div class="content">
           <div class="left">
             <img src="@/assets/images/sports.png" />
             <div class="item-name">实时配速</div>
           </div>
           <div class="right" :class="getHeartRateColor(i.matchingSpeed)">{{ i.matchingSpeed?i.matchingSpeed:0 }}</div>
-        </div>
-        <div class="footer">
+        </div> -->
+        <!-- <div class="footer">
           <p>共计时:{{ i.timestamp?dayjs(i.timestamp).format('mm:ss') :0 }}</p>
           <p>组次 {{i.number}}</p>
-        </div>
-        <div class="btn">
+        </div> -->
+        <!-- <div class="btn">
           <el-button type="warning" plain @click="stopSingle(i.studentId)">暂停</el-button>
           <el-button plain @click="stopSingle(i.studentId)">结束</el-button>
           <el-button type="primary" @click="startSingle(i.studentId)" plain>开始</el-button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
+.User {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  justify-content: space-around;
+}
 
-.User{
+:deep(.el-form-item--default .el-form-item__label) {
+  font-size: 18px;
+  font-weight: 500;
+  color: black;
+}
+
+
+.card-list {
+  height: 250px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.box-card {
+  margin: 30px 10px;
+  font-size: 30px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+
+  .top {
     display: flex;
     align-items: center;
-   font-size: 18px;
-   font-weight: 500;
-   justify-content: space-around;
-}
-:deep(.el-form-item--default .el-form-item__label ){
- font-size: 18px;
- font-weight: 500;
- color: black;
-}
-.card-list{
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-.box-card {
-        margin: 30px 10px;
-        font-size: 20px;
-        box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
-        .top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .my-name {
-        background-color: #5b84ff;
-        border-radius: 0 30px 30px 0;
-        padding: 15px 20px;
-        color: white;
-      }
-      .left{
-        display: flex;
-        align-items: center;
-        img{
-          width: 20px;
-          height: 20px;
-        }
-        .item-name{
-          padding-left: 10px;
-        }
-      }
-      .content {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 55px;
-      }
-      .right {
-        font-weight: 700;
-        color: #70b605;
-        font-size: 20px;
-        &.green {
-    color: #70B605;
-    transition: font-size 0.3s ease; /* 过渡动画 */
+    justify-content: space-between;
   }
-  &.yellow {
-    color: yellow;
-    transition: font-size 0.3s ease; /* 过渡动画 */
-    transform: scale(1.5); /* 将字体放大 1.5 倍 */
-  }
-  &.red {
-    color: red;
-    transition: font-size 0.3s ease; /* 过渡动画 */
-    transform: scale(1.5); /* 将字体放大 1.5 倍 */
-  }
-  &.purple {
-    color: purple;
-    transition: font-size 0.3s ease; /* 过渡动画 */
-    transform: scale(1.5); /* 将字体放大 1.5 倍 */
-  }
-      }
-      .footer{
-        display: flex;
-        justify-content: space-between;
-        padding: 0 55px;
-        font-size: 13px;
-      }
-      .btn{
-        float: right;
-        padding-right: 35px;
-        padding-bottom: 20px;
-       :deep(.el-button){
-        width: 70px;
-       }
-      }
-      }
 
+  .my-name {
+    background-color: #5b84ff;
+    border-radius: 0 30px 30px 0;
+    padding: 15px 20px;
+    color: white;
+  }
 
-   }
-   .battery-container{
+  .left {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .item-name {
+      padding-left: 10px;
+    }
+  }
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 55px;
+    margin-top: 20px;
+  }
+
+  .right {
+    font-weight: 700;
+    color: #70b605;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    &.green {
+      color: #70b605;
+      transition: font-size 0.3s ease;
+    }
+
+    &.yellow {
+      color: yellow;
+      transition: font-size 0.3s ease;
+      transform: scale(1.5);
+    }
+
+    &.red {
+      color: red;
+      transition: font-size 0.3s ease;
+      transform: scale(1.5);
+    }
+
+    &.purple {
+      color: purple;
+      transition: font-size 0.3s ease;
+      transform: scale(1.5);
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 55px;
+    font-size: 13px;
+  }
+
+  .btn {
+    float: right;
+    padding-right: 35px;
+    padding-bottom: 20px;
+
+    :deep(.el-button) {
+      width: 70px;
+    }
+  }
+}
+
+.battery-container {
   width: 68px;
   height: 34px;
-  border: 4px solid #DFE6EE ;
+  border: 4px solid #dfe6ee;
   border-radius: 4px;
   position: relative;
   transform: scale(0.7);
   transform-origin: left top;
   margin-right: 10px;
-  &:after{
+
+  &:after {
     content: "";
     display: block;
     height: 12px;
     width: 4px;
     position: absolute;
-    background:#DFE6EE ;
+    background: #dfe6ee;
     right: -8px;
     top: 0;
     bottom: 0;
     margin: auto 0;
   }
-  // 电池块
-  .shell{
+
+  .shell {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     padding: 2px;
-    background: #F8FAFC ;
+    background: #f8fafc;
     display: grid;
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-column-gap: 2px;
-    .block{
+
+    .block {
       width: 100%;
       height: 100%;
     }

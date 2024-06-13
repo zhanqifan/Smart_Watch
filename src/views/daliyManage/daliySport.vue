@@ -15,7 +15,7 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
     <el-card class="card">
       <!-- 顶部搜索 -->
       <SearchTop>
-        <el-button type="primary" size="large">导出图片</el-button>
+        <!-- <el-button type="primary" size="large">导出图片</el-button> -->
       </SearchTop>
 
       <!-- 队伍训练情况 -->
@@ -25,12 +25,12 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
           <TeamSport />
         </div>
         <div class="data_condition">
-          <div class="data_list" v-for="(item,index) in 3" :key="index">
+          <div class="data_list" v-for="(item,index) in 1" :key="index">
             <p class="data_item">
               <span class="label">平均心率(次/分)</span>
               <span class="value">135</span>
             </p>
-            <p class="data_item">
+            <!-- <p class="data_item">
               <span class="label">平均配速(公里/分)</span>
               <span class="value">135</span>
             </p>
@@ -38,7 +38,7 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
             <p class="data_item">
               <span class="label">平均血氧</span>
               <span class="value">135</span>
-            </p>
+            </p> -->
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
         <LineEcharts2 class="flex-1" />
       </div>
     </BaseCard>
-    <BaseCard :title="'配速'">
+    <!-- <BaseCard :title="'配速'">
       <div class="flex">
         <LineEcharts1 class="flex-1" />
         <LineEcharts2 class="flex-1" />
@@ -61,7 +61,7 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
         <LineEcharts1 class="flex-1" />
         <LineEcharts2 class="flex-1" />
       </div>
-    </BaseCard>
+    </BaseCard> -->
   </div>
 </template>
 
@@ -86,12 +86,13 @@ import BaseCard from '@/components/Mycomponent/BaseCard.vue';
     display: flex;
     font-size:15px;
     align-items: center;
-     justify-content: space-around;
+    // justify-content: start;
+    //  justify-content: space-around;
      .data_list{
         width:35%;
 
         .data_item {
-          padding: 0 30px;
+          padding: 0 70px;
         display: flex;
         justify-content: space-between;
       }

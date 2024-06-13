@@ -7,10 +7,7 @@ const queryParams = ref({
    dayTime:"",
    exerciseTypeName:"",
   //  data:dayjs().format('YYYY-MM-DD'),
-   time:[
-   dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-   dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')    // 当天的 24 点
-],
+   time:new Date(),
   })
 
 const options = ref()//训练队
@@ -62,12 +59,12 @@ const reset = () =>{
    dayTime:"",
    exerciseTypeName:"",
   //  data:dayjs().format('YYYY-MM-DD'),
-   time:[
-   dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-   dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')    // 当天的 24 点
-],
+   time:"",
   })
   emit('reset')
+}
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
 }
 onMounted(()=>{
   getTeam()
@@ -96,16 +93,8 @@ onMounted(()=>{
           <el-col :span="10">
             <el-form-item prop="tenantId" style="display: flex; flex-direction: row;" label="训练时间">
               <!-- <el-date-picker v-model="queryParams.data" style="width: 150px;" type="date" placeholder="请选择日期" :disabled-date="disabledDate" /> -->
-              <el-time-picker
-                v-model="queryParams.time"
-                is-range
-                style="width: 100px;"
-                arrow-control
-                :clearable="false"
-                range-separator="To"
-                start-placeholder="开始时间"
-                end-placeholder="结束时间"
-              />
+
+              <el-date-picker v-model="queryParams.time" type="date" placeholder="请选择时间" :disabled-date="disabledDate" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -120,7 +109,7 @@ onMounted(()=>{
     <el-card shadow="hover" class="card" v-for="item in ReportList" :key="item.id">
       <div class="left_detail">
         <p>
-          训练队伍名称:<span>{{item.trainingTeamName}}</span>
+          训练队伍名称:<span>{{item.taskName}}</span>
         </p>
         <p>
           训练人数:<span>{{item.personNum??0}}人</span>
@@ -157,7 +146,7 @@ onMounted(()=>{
 
   .left_detail{
     display: flex;
-    font-size:1.5vw;
+    font-size:20px;
     span{
       margin:0 20px
     }
@@ -165,7 +154,7 @@ onMounted(()=>{
   .right_detail{
     display: flex;
   align-items: center;
-  font-size: 23px;
+  font-size: 20px;
   }
 }
 </style>

@@ -8,6 +8,9 @@ const queryParams = ref({
  const handleQuery = () =>{
     console.log('搜索')
  }
+ const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
+}
 </script>
 <template>
   <div class="top">
@@ -26,14 +29,7 @@ const queryParams = ref({
         </el-col>
         <el-col :span="9">
           <el-form-item label="训练时间" prop="contactUserName">
-            <el-time-picker
-              v-model="queryParams.dayTime"
-              is-range
-              range-separator="To"
-              arrow-control
-              start-placeholder="开始时间"
-              end-placeholder="结束"
-            />
+            <el-date-picker v-model="queryParams.dayTime" type="date" placeholder="请选择时间" :disabled-date="disabledDate" />
           </el-form-item>
         </el-col>
         <el-col :span="3" :offset="6">

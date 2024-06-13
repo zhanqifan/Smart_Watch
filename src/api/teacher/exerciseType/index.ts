@@ -45,7 +45,7 @@ export const addExerciseType = (data: ExerciseTypeForm) => {
  */
 export const updateExerciseType = (data: ExerciseTypeForm) => {
   return request({
-    url: '/teacher/exerciseType',
+    url: '/teacher/exerciseType/update',
     method: 'put',
     data: data
   });
@@ -53,11 +53,14 @@ export const updateExerciseType = (data: ExerciseTypeForm) => {
 
 /**
  * 删除运动类型
- * @param id
+ * @param idList
  */
-export const delExerciseType = (id: string | number | Array<string | number>) => {
+export const delExerciseType = (idList: string | number | Array<string | number>) => {
   return request({
-    url: '/teacher/exerciseType/' + id,
-    method: 'delete'
+    url: '/teacher/exerciseType/delete',
+    method: 'delete',
+    params: {
+      idList
+    }
   });
 };

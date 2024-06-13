@@ -1,37 +1,39 @@
 // rem 函数
 function setRem() {
-  const defalutWidth = 1920; // 默认宽度
-  const defalueScale = 1; // 默认比例关系
-  let defalutFontSize = 192; // 默认字体大小
+  const defaultWidth = 1920; // 默认宽度
+  const defaultFontSize = 192; // 默认字体大小
+  const mobileBaseWidth = 375; // 移动端基准宽度
+  const mobileBaseFontSize = 80; // 移动端基准字体大小
 
-  const getWidth = window.innerWidth; // 获取屏幕的宽度
-  let currentScale = getWidth / defalutWidth; // 计算当前的屏幕大小和默认宽度之间的比例
+  const screenWidth = window.innerWidth; // 获取屏幕的宽度
+  let currentScale = screenWidth / defaultWidth; // 计算当前的屏幕大小和默认宽度之间的比例
 
   // 防止缩放太小
   if (currentScale < 0.85) {
-    if (getWidth > 1024 && getWidth < 1366) {
+    if (screenWidth > 1024 && screenWidth < 1366) {
       currentScale = 0.855;
-    } else if (getWidth >= 1366) {
-      console.log('11');
+    } else if (screenWidth >= 1366) {
       currentScale = 1;
+    } else {
+      currentScale = 0.855;
     }
   }
-  // 当前为平板时
-  if (getWidth <= 1024) {
-    defalutFontSize = defalutFontSize * 1.5;
-  }
 
-  // 计算的宽度比例关系 再 * 默认的字体大小,获取计算的字体大小
-  const currentFontSize = (currentScale / defalueScale) * defalutFontSize;
-  document.documentElement.style.fontSize = currentFontSize + 'px';
+  // 根据屏幕宽度判断是否为移动端
+  if (screenWidth <= 750) {
+    const mobileScale = screenWidth / mobileBaseWidth;
+    const currentFontSize = (mobileScale * mobileBaseFontSize).toFixed(2);
+    document.documentElement.style.fontSize = currentFontSize + 'px';
+  } else {
+    // 当前为 PC 或平板时
+    const currentFontSize = (currentScale * defaultFontSize).toFixed(2);
+    document.documentElement.style.fontSize = currentFontSize + 'px';
+  }
 }
 
 // 调用方法
 setRem();
-// 监听窗口在变化时重新设置跟文件大小
+// 监听窗口在变化时重新设置根字体大小
 window.onresize = function () {
   setRem();
 };
-
-// 如果没有生效，则在 main.ts 内导入本文件  import './utils/rem'
-// export default {}

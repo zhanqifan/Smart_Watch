@@ -11,8 +11,8 @@ const loading = ref(true)
 const ReportList = ref()
 const total = ref()
 const search = ref({
-  pageSize:page.value,
-  pageNum: limit.value,
+  pageSize:limit.value,
+  pageNum:page.value ,
 })
 
 const getReport = async () => {
@@ -46,8 +46,8 @@ const handlereset = () => {
 const handleSearch = ({ time, ...msg }: any) => {
   loading.value = true
   const params = {
-    'params[beginTime]': dayjs(time[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-    'params[endTime]': dayjs(time[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    'params[beginTime]': dayjs(time).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    'params[endTime]': dayjs(time).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
     ...msg
   }
 

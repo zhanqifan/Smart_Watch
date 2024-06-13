@@ -33,7 +33,7 @@ export const constantRoutes: RouteOption[] = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index.vue')
+        component: () => import('@/views/daliyManage/daliySport.vue')
       }
     ]
   },

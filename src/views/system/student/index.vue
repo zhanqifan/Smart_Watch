@@ -30,20 +30,20 @@
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:studentInfo:add']">新增</el-button>
           </el-col>
-          <el-col :span="1.5">
+          <!-- <el-col :span="1.5">
             <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:studentInfo:edit']"
               >修改</el-button
             >
-          </el-col>
-          <el-col :span="1.5">
+          </el-col> -->
+          <!-- <el-col :span="1.5">
             <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete()" v-hasPermi="['system:studentInfo:remove']"
               >删除</el-button
             >
-          </el-col>
-          <el-col :span="1.5">
+          </el-col> -->
+          <!-- <el-col :span="1.5">
             <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:studentInfo:export']">导出</el-button>
             <el-button plain icon="Upload" @click="handleUpload">导入</el-button>
-          </el-col>
+          </el-col> -->
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
         </el-row>
       </template>
@@ -217,7 +217,7 @@ const submitForm = () => {
       } else {
         await addStudentInfo(form.value).finally(() =>  buttonLoading.value = false);
       }
-      proxy?.$modal.msgSuccess("修改成功");
+      proxy?.$modal.msgSuccess("操作成功");
       dialog.visible = false;
       await getList();
     }
@@ -239,37 +239,37 @@ const handleExport = () => {
     ...queryParams.value
   }, `studentInfo_${new Date().getTime()}.xlsx`)
 }
-const handleUpload = async() =>{
-  try {
-    const res = await expoetTemplate();
-    console.log(res);
+// const handleUpload = async() =>{
+//   try {
+//     const res = await expoetTemplate();
+//     console.log(res);
 
-    // 检查 res 中是否包含了正确的二进制数据
+//     // 检查 res 中是否包含了正确的二进制数据
 
-    // 将二进制数据转换成 Uint8Array 格式
-    const uint8Array = new Uint8Array(res);
+//     // 将二进制数据转换成 Uint8Array 格式
+//     const uint8Array = new Uint8Array(res);
 
-    // 通过 XLSX 库将 Uint8Array 格式的数据解析成 workbook 对象
-    const workbook = XLSX.read(uint8Array, { type: 'array' });
+//     // 通过 XLSX 库将 Uint8Array 格式的数据解析成 workbook 对象
+//     const workbook = XLSX.read(uint8Array, { type: 'array' });
 
-    // 通过 workbook 获取第一个 sheet
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
+//     // 通过 workbook 获取第一个 sheet
+//     const firstSheetName = workbook.SheetNames[0];
+//     const worksheet = workbook.Sheets[firstSheetName];
 
-    // 将 sheet 数据转换成 JSON 格式
-    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+//     // 将 sheet 数据转换成 JSON 格式
+//     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-    // 输出 jsonData，检查是否得到了预期的数据格式
-    console.log(jsonData);
+//     // 输出 jsonData，检查是否得到了预期的数据格式
+//     console.log(jsonData);
 
-    // 进行进一步的操作，如更新界面或其他逻辑处理
-  } catch (error) {
-    console.error('上传并解析 Excel 文件时出现错误:', error);
-    // 在控制台输出错误信息，便于调试
-  }
-// await getList();
-// proxy?.$modal.msgSuccess("导入成功");
-}
+//     // 进行进一步的操作，如更新界面或其他逻辑处理
+//   } catch (error) {
+//     console.error('上传并解析 Excel 文件时出现错误:', error);
+//     // 在控制台输出错误信息，便于调试
+//   }
+// // await getList();
+// // proxy?.$modal.msgSuccess("导入成功");
+// }
 onMounted(() => {
   getList();
 });

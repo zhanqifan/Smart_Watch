@@ -45,8 +45,8 @@ export const addTrainingTeam = (data: TrainingTeamForm) => {
  */
 export const updateTrainingTeam = (data: TrainingTeamForm) => {
   return request({
-    url: '/teacher/trainingTeam',
-    method: 'put',
+    url: '/teacher/trainingTeam/update',
+    method: 'post',
     data: data
   });
 };
@@ -57,7 +57,7 @@ export const updateTrainingTeam = (data: TrainingTeamForm) => {
  */
 export const delTrainingTeam = (id: string | number | Array<string | number>) => {
   return request({
-    url: '/teacher/trainingTeam/' + id,
+    url: '/teacher/trainingTeam/delete/' + id,
     method: 'delete'
   });
 };

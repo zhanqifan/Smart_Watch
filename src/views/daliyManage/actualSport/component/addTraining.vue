@@ -43,7 +43,7 @@ const sportForm =ref({
 const rules = reactive({
   trainingTeamId:[{ required: true, message: '请选择',trigger: 'change'  }],
   exerciseTypeName: [{ required: true, message: '请选择' ,trigger: 'change'}],
-  number: [{ required: true, message: '请输入运动次数' ,trigger: 'blur'},],
+  // number: [{ required: true, message: '请输入运动次数' ,trigger: 'blur'},],
 
 })
 const handleSend = ()=>{
@@ -82,9 +82,9 @@ const handleSend = ()=>{
           <el-option v-for="item in options1" :key="item.value" :label="item.exerciseTypeName" :value="item.exerciseTypeId" />
         </el-select>
       </el-form-item>
-      <el-form-item label="组数" prop="number">
+      <!-- <el-form-item label="组数" prop="number">
         <el-input v-model.number="sportForm.number" placeholder="请输入运动次数"></el-input>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
   </RenderDialog>
 </template>
