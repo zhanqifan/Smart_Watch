@@ -40,8 +40,7 @@ const getTrainList =async() =>{
   console.log(res.data)
   list.value =res.data
 }
-
-
+const btnShow =ref(true)
 // 开始定时器
 const startInterval = async () => {
   if (intervalId.value !== null) {
@@ -50,7 +49,7 @@ const startInterval = async () => {
     return;
   }
   let number = 0;
-
+   btnShow.value=false
   intervalId.value = setInterval(async () => {
     // 处理暂停学生
     // const studentIds = list.value.students.filter(
@@ -91,6 +90,7 @@ const stopInterval = (control:boolean) => {
       control?pausedStudents.value=[]:false//结束则情况储存暂停学生的id
     clearInterval(intervalId.value);
     intervalId.value = null;
+    btnShow.value=true
     ElMessage({
       type:'success',
       message:'操作成功'
@@ -197,9 +197,9 @@ onMounted(()=>{
       <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
         <!-- <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button> -->
-        <el-button type="primary" size="large" @click="startInterval()">一键开始</el-button>
-        <el-button type="primary" size="large" @click="stopInterval(true)">一键结束</el-button>
-        <el-button type="primary" size="large" @click="reset">重置</el-button>
+        <el-button type="primary" v-show="btnShow" size="large" @click="startInterval()">一键开始</el-button>
+        <el-button type="danger" v-show="!btnShow" size="large" @click="stopInterval(true)">一键结束</el-button>
+        <!-- <el-button type="primary" size="large" @click="reset">重置</el-button> -->
       </div>
     </div>
     <div class="card-list" :style="cardListStyle">

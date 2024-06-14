@@ -16,13 +16,13 @@ const tableHeaders = [
   { prop: 'studentName', label: '姓名' },
   { prop: 'averageHeartRate', label: '平均心率' },
   { prop: 'maxHeartRate', label: '最高心率' },
-  { prop: 'averagePace', label: '平均配速' },
-  { prop: 'maxPace', label: '最高配速' },
-  { prop: 'averageBloodOxygen', label: '平均血氧' },
-  { prop: 'maxBloodOxygen', label: '最高血氧' },
+  // { prop: 'averagePace', label: '平均配速' },
+  // { prop: 'maxPace', label: '最高配速' },
+  // { prop: 'averageBloodOxygen', label: '平均血氧' },
+  // { prop: 'maxBloodOxygen', label: '最高血氧' },
 ];
 const goBack = () => {
-  router.go(-1); // 路由页面回退
+  router.push('/trainmanage/trainingreport'); // 路由页面回退
 };
 // const exportRe = async() =>{
 //   const res =await exportReport(route.query.taskId)
@@ -43,11 +43,11 @@ onMounted(()=>{
           训练类型:<span>{{headerInfo?.trainingType}}</span>
         </p>
         <p>
-          授课老师:<span>{{headerInfo?.teacherName}}老师</span>
+          授课老师:<span>{{headerInfo?.teacherName}}</span>
         </p>
-        <p>
+        <!-- <p>
           训练时间:<span class="">{{ headerInfo?.trainingDate }}</span>
-        </p>
+        </p> -->
         <p>
           受训人数:<span>{{headerInfo?.personNum }}</span>
         </p>
@@ -64,12 +64,12 @@ onMounted(()=>{
           :key="item.prop"
           :prop="item.prop"
           :label="item.label"
-          :width="currentPageWidth/7"
           :sortable="item.prop !== 'name'"
           :fixed="item.prop === 'name' ? 'left' : null"
           align="center"
         />
       </el-table>
+      <!-- :width="currentPageWidth/7" -->
     </div>
   </div>
 </template>
