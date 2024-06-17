@@ -98,4 +98,11 @@ const handleSend = ()=>{
 .ruleForm{
   padding: 30px;
 }
+// @media(max-width:750px){
+//   .btn{
+//     width: 100px !important;
+//     height: 50px!important;
+//     font-size: 30px;
+//    }
+// }
 </style>
