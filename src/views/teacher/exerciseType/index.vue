@@ -46,7 +46,7 @@
         <el-table-column label="运动名称" align="center" prop="exerciseName" />
         <!-- <el-table-column label="组数" align="center" prop="number" /> -->
         <el-table-column label="备注" align="center" prop="remarks" />
-        <el-table-column label="租户号" align="center" prop="tenantId" />
+        <!-- <el-table-column label="租户号" align="center" prop="tenantId" /> -->
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">

@@ -37,6 +37,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="唯一标识" align="center" prop="id" v-if="true" />
         <el-table-column label="训练队名" align="center" prop="teamName" />
+
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
@@ -44,6 +45,9 @@
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['teacher:trainingTeam:remove']"></el-button>
+            </el-tooltip>
+            <el-tooltip content="绑定学生" placement="top">
+              <el-button link type="primary" icon="User" @click="handleStudent(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -65,11 +69,27 @@
         </div>
       </template>
     </el-dialog>
+    <el-dialog title="绑定学生" v-model="isShow">
+      <el-form ref="studentFormRef" :model="form1" :rules="rules1" label-width="80px">
+        <el-form-item label="训练队名" prop="studentId">
+          <el-select v-model="form1.studentId" multiple filterable placeholder="请选择" style="width: 100%;">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button :loading="buttonLoading" type="primary" @click="submit">确 定</el-button>
+          <el-button @click="isShow=false">取 消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="TrainingTeam" lang="ts">
-import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam } from '@/api/teacher/trainingTeam';
+import { listStudentInfo } from '@/api/system/studentInfo';
+import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam,containtStudent } from '@/api/teacher/trainingTeam';
 import { TrainingTeamVO, TrainingTeamQuery, TrainingTeamForm } from '@/api/teacher/trainingTeam/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -90,7 +110,7 @@ const dialog = reactive<DialogOption>({
   visible: false,
   title: ''
 });
-
+const studentFormRef =ref()
 const initFormData: TrainingTeamForm = {
   id: undefined,
   teamName: undefined,
@@ -114,6 +134,12 @@ const data = reactive<PageData<TrainingTeamForm, TrainingTeamQuery>>({
   }
 });
 
+const rules1=reactive({
+  studentId: [
+      { required: true, message: "学生绑定不为空", trigger: "change" }
+    ],
+
+  })
 const { queryParams, form, rules } = toRefs(data);
 
 /** 查询训练队列表 */
@@ -136,7 +162,36 @@ const reset = () => {
   form.value = {...initFormData};
   trainingTeamFormRef.value?.resetFields();
 }
+const isShow =ref(false)
+const form1 = ref({
+  studentId:[],
+  trainingTeamId:""
+})
+const options = ref()
+const handleStudent = async(row) =>{
+    form1.value.trainingTeamId=row.id
+    const _id = row?.id
+    const res =await listStudentInfo({pageNum:1,pageSize:9999})
+  const result = await getTrainingTeam(_id);
+  if(result.data.studentList){
+   form1.value.studentId = result.data.studentList.map(item=>item.id)}else{
+    form1.value.studentId=[]
+   }
+     options.value=res.rows.map((item)=>{return{value:item.id,label:item.name}})
+     isShow.value=true
+  }
+  const submit = async() =>{
+    studentFormRef.value.validate(async(valid)=>{
+     if(valid){
+      const res =await containtStudent(form1.value)
+      console.log(res)
+      isShow.value=false
+      await getList();
+      proxy?.$modal.msgSuccess("修改成功");
+     }
+    })
 
+  }
 /** 搜索按钮操作 */
 const handleQuery = () => {
   queryParams.value.pageNum = 1;

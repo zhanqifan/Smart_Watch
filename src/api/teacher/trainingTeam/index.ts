@@ -61,3 +61,12 @@ export const delTrainingTeam = (id: string | number | Array<string | number>) =>
     method: 'delete'
   });
 };
+
+// 训练队绑定学生
+export const containtStudent = (data: any) => {
+  return request({
+    url: '/teacher/trainingTeam/bindStudent',
+    method: 'post',
+    data
+  });
+};
