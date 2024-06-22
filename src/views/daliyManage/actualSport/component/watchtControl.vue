@@ -182,6 +182,11 @@ onMounted(()=>{
 
   getTrainList()
 })
+// 防住没结束定时器就刷新页面
+onBeforeUnmount(()=>{
+  clearInterval(intervalId.value as number);
+    intervalId.value = null;
+})
 </script>
 <template>
   <div>
