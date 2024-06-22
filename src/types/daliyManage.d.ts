@@ -35,12 +35,14 @@ export interface addTeamResponse {
   updateTime: string;
   tenantId: null;
   id: string;
+  personNum: number;
   trainingTeamId: string;
   trainingTeamName: string;
   exerciseTypeName: string;
   number: number;
   teacherName: string;
   trainingTime: null;
+  taskName: string;
   studentInfoList: studenList[];
   students: number[];
   trainingPeopleNumber: null;

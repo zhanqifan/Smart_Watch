@@ -8,8 +8,9 @@ import { dayjs } from 'element-plus';
 const page = ref(1) // 当前页码
 const limit =ref(10)
 const loading = ref(true)
-const ReportList = ref()
+const ReportList = ref([])
 const total = ref()
+const route = useRoute()
 const search = ref({
   pageSize:limit.value,
   pageNum:page.value ,
@@ -59,13 +60,14 @@ const handleSearch = ({ time, ...msg }: any) => {
 }
 
 onMounted(() => {
+
   getReport()
 })
 </script>
 
 <template>
   <div v-loading="loading">
-    <teamDetail :ReportList="ReportList" :total="total" @search="handleSearch" @reset="handlereset" />
+    <teamDetail :ReportList="ReportList" :total="total" :taskId="route.query.taskId" :page="page" @search="handleSearch" @reset="handlereset" />
     <!-- 分页组件 -->
     <Pagination :total="total" v-model:page="page" v-model:limit="limit" @pagination="handlePage" />
   </div>

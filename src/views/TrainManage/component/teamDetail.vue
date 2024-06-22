@@ -2,6 +2,8 @@
 import { addTeamResponse } from '@/types/daliyManage';
 import { getTeamList,getTrainType } from '@/api/daliyManage';
 import { dayjs } from 'element-plus';
+import TrainState from '@/store/modules/train';
+import TrainDialog from './TrainDialog.vue';
 const queryParams = ref({
    trainingTeamName:"",
    dayTime:"",
@@ -9,9 +11,14 @@ const queryParams = ref({
   //  data:dayjs().format('YYYY-MM-DD'),
    time:new Date(),
   })
-
+const trainState = TrainState()
 const options = ref()//训练队
 const options1 = ref()// 训练类型
+const TrainRef = ref()
+const route =useRoute()
+defineProps<{
+  ReportList:Array<addTeamResponse>,
+}>()
 const getTeam =async() =>{
       const res =await getTeamList()
       options.value=res.data.map(item => {
@@ -20,9 +27,7 @@ const getTeam =async() =>{
           trainingTeamName:item.teamName
          }
       });
-      console.log(options.value)
     }
-
  const getType =async() =>{
   const res =await getTrainType()
   options1.value= res.data.map(item=>{
@@ -32,22 +37,10 @@ const getTeam =async() =>{
     }
   })
  }
-// const disabledDate = (time: Date) => {
-//   return time.getTime() > Date.now()
-// }
 
-const router= useRouter()
-defineProps<{
-  ReportList:Array<addTeamResponse>
-}>()
 // 查看详情
 const goDetail = (taskId:string) =>{
-   router.push({
-    path:'/trainmanage/datalist',
-    query:{
-      taskId
-    }
-  })
+  TrainRef.value.open(taskId)
 }
 const emit = defineEmits(['search','reset'])
 const search = () =>{
@@ -58,7 +51,6 @@ const reset = () =>{
    trainingTeamName:"",
    dayTime:"",
    exerciseTypeName:"",
-  //  data:dayjs().format('YYYY-MM-DD'),
    time:"",
   })
   emit('reset')
@@ -69,6 +61,10 @@ const disabledDate = (time: Date) => {
 onMounted(()=>{
   getTeam()
   getType()
+  if(trainState.state.dialogShow){
+    TrainRef.value.open(route.query.taskId)
+    trainState.changeState(false)
+  }
 })
 </script>
 <template>
@@ -109,22 +105,26 @@ onMounted(()=>{
     <el-card shadow="hover" class="card" v-for="item in ReportList" :key="item.id">
       <div class="left_detail">
         <p>
-          训练队伍名称:<span>{{item.taskName}}</span>
+          队名:<span>{{item.taskName}}</span>
         </p>
         <p>
-          训练人数:<span>{{item.personNum??0}}人</span>
+          人数:<span>{{item.personNum??0}}人</span>
         </p>
         <p>
           运动类型:<span>{{ item.exerciseTypeName }}</span>
         </p>
         <p>
-          教师名称:<span class="">{{ item.teacherName }}</span>
+          教师:<span>{{ item.teacherName }}</span>
+        </p>
+        <p>
+          时间:<span>{{ dayjs(item.createTime).format('MM-DD') }}</span>
         </p>
       </div>
       <div class="right_detail" @click="goDetail(item.id)">
         查看报告详情<el-icon><DArrowRight /></el-icon>
       </div>
     </el-card>
+    <TrainDialog ref="TrainRef" />
   </div>
 </template>
 
@@ -147,7 +147,12 @@ onMounted(()=>{
   .left_detail{
     display: flex;
     font-size:20px;
+  //
     span{
+      white-space: normal; /* 允许文本在容器内换行 */
+    word-wrap: break-word; /* 在单词内部换行 */
+    word-break: break-all; /* 在任何地方进行换行 */
+    width: 100%; /* 让每个 p 标签占据整个宽度 */
       margin:0 20px
     }
   }

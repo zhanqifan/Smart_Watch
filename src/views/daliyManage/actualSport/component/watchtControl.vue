@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { getTrainId } from '@/api/daliyManage';
 import { addTeamResponse } from '@/types/daliyManage';
-// import ReconnectingWebSocket from 'reconnecting-websocket';
 import { startAtOneButton,resetWatch } from '@/api/daliyManage';
-import { dayjs } from 'element-plus';
-// import { resetWatch } from '@/api/daliyManage';
+import TrainState from '@/store/modules/train';
 const options = [
   {
     value: '100',
@@ -20,6 +18,7 @@ const options = [
   },
 
 ]
+const trainState= TrainState()
 const props=defineProps<{
   taskId:any
 }>()
@@ -96,11 +95,12 @@ const stopInterval = (control:boolean) => {
       message:'操作成功'
     })
     router.push({
-    path:'/trainmanage/datalist',
+    path:'/trainmanage/trainingreport',
     query:{
       taskId:props.taskId
     }
   })
+  trainState.changeState(true)
     reset()
   }
 };
