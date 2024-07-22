@@ -23,7 +23,7 @@ const getBreadcrumb = () => {
   const first = matched[0]
   // 判断是否为首页
   if (!isDashboard(first)) {
-    matched = ([{ path: '/index', meta: { title: '首页' } }] as any).concat(matched)
+    matched = ([{ path: '/daliysportmenu/daliysport', meta: { title: '首页' } }] as any).concat(matched)
   }
   levelList.value = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
 }

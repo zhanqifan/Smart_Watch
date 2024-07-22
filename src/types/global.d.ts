@@ -36,6 +36,8 @@ declare global {
 
     /** 上传的地址 */
     url: string;
+     /** 获取模板的地址 */
+    temUrl?:string
   }
 
   /**
