@@ -4,7 +4,7 @@ export const TrainState = defineStore(
   'train',
   () => {
     const state = reactive({
-      dialogShow: true //第一次进入训练报告管理打开弹窗表格
+      dialogShow: false //第一次进入训练报告管理打开弹窗表格
     });
 
     const changeState = (value: boolean) => {

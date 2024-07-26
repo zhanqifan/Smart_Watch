@@ -23,13 +23,14 @@ const queryParams = ref({
               :suffix-icon="Search"
               placeholder="请输入训练队名称"
               clearable
+
               @keyup.enter="handleQuery"
             />
           </el-form-item>
         </el-col>
         <el-col :span="9">
           <el-form-item label="训练时间" prop="contactUserName">
-            <el-date-picker v-model="queryParams.dayTime" type="date" placeholder="请选择时间" :disabled-date="disabledDate" />
+            <el-date-picker v-model="queryParams.dayTime" type="date"  :editable="false" placeholder="请选择时间" :disabled-date="disabledDate" />
           </el-form-item>
         </el-col>
         <el-col :span="3" :offset="6">

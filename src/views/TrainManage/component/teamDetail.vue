@@ -4,11 +4,17 @@ import { getTeamList,getTrainType } from '@/api/daliyManage';
 import { dayjs } from 'element-plus';
 import TrainState from '@/store/modules/train';
 import TrainDialog from './TrainDialog.vue';
-const queryParams = ref({
+
+interface QueryParams {
+  trainingTeamName: string;
+  dayTime: string;
+  exerciseTypeName: string;
+  time: Date | null;
+}
+const queryParams = ref<QueryParams>({
    trainingTeamName:"",
    dayTime:"",
    exerciseTypeName:"",
-  //  data:dayjs().format('YYYY-MM-DD'),
    time:new Date(),
   })
 const trainState = TrainState()
@@ -51,7 +57,7 @@ const reset = () =>{
    trainingTeamName:"",
    dayTime:"",
    exerciseTypeName:"",
-   time:"",
+   time:null ,
   })
   emit('reset')
 }
@@ -74,14 +80,14 @@ onMounted(()=>{
         <el-row>
           <el-col :span="4" :offset="1">
             <el-form-item prop="tenantId">
-              <el-select v-model="queryParams.trainingTeamName" filterable placeholder="请选择训练队名称" style="width: 100%;">
+              <el-select v-model="queryParams.trainingTeamName"  placeholder="请选择训练队名称" style="width: 100%;">
                 <el-option v-for="item in options" :key="item.trainingTeamId" :label="item.trainingTeamName" :value="item.trainingTeamId" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item prop="tenantId">
-              <el-select v-model="queryParams.exerciseTypeName" filterable clearable placeholder="请选择多少米" style="width: 100%;">
+              <el-select v-model="queryParams.exerciseTypeName" clearable placeholder="请选择多少米" style="width: 100%;">
                 <el-option v-for="item in options1" :key="item.value" :label="item.exerciseTypeName" :value="item.exerciseTypeId" />
               </el-select>
             </el-form-item>
@@ -90,7 +96,7 @@ onMounted(()=>{
             <el-form-item prop="tenantId" style="display: flex; flex-direction: row;" label="训练时间">
               <!-- <el-date-picker v-model="queryParams.data" style="width: 150px;" type="date" placeholder="请选择日期" :disabled-date="disabledDate" /> -->
 
-              <el-date-picker v-model="queryParams.time" type="date" placeholder="请选择时间" :disabled-date="disabledDate" />
+              <el-date-picker v-model="queryParams.time" :editable="false" type="date" placeholder="请选择时间" :disabled-date="disabledDate" />
             </el-form-item>
           </el-col>
           <el-col :span="4">

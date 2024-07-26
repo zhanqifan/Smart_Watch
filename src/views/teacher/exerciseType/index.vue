@@ -73,9 +73,9 @@
         <el-form-item label="备注" prop="remarks">
           <el-input v-model="form.remarks" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="租户号" prop="tenantId">
+        <!-- <el-form-item label="租户号" prop="tenantId">
           <el-input v-model="form.tenantId" placeholder="请输入租户号" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <template #footer>
         <div class="dialog-footer">
