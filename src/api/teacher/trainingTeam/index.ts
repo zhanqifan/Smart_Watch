@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 import { AxiosPromise } from 'axios';
-import { TrainingTeamVO, TrainingTeamForm, TrainingTeamQuery } from '@/api/teacher/trainingTeam/types';
+import { TrainingTeamVO, TrainingTeamForm, TrainingTeamQuery, StudentParams } from '@/api/teacher/trainingTeam/types';
 
 /**
  * 查询训练队列表
@@ -63,17 +63,18 @@ export const delTrainingTeam = (id: string | number | Array<string | number>) =>
 };
 
 // 训练队绑定学生
-export const containtStudent = (data: any) => {
+export const containtStudent = (data: StudentParams) => {
   return request({
     url: '/teacher/trainingTeam/bindStudent',
     method: 'post',
     data
   });
 };
-
-export const delStundetId = (studentId: string | number) => {
+// 修改训练队学生
+export const PostStundetId = (data: StudentParams) => {
   return request({
-    url: `/teacher/studentInfo/${studentId}`,
-    method: 'delete'
+    url: `/teacher/trainingTeam/updateMember`,
+    method: 'post',
+    data
   });
 };

@@ -33,3 +33,14 @@ export interface TrainingTeamQuery extends PageQuery {
    */
   params?: any;
 }
+
+export interface StudentParams {
+  /**
+   * 训练队Id
+   */
+  trainingTeamId: string | number;
+  /**
+   * 学生Id
+   */
+  studentId: string[];
+}

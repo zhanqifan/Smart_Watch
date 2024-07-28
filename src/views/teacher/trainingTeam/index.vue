@@ -72,15 +72,15 @@
     <el-dialog title="绑定学生" v-model="isShow">
       <el-form ref="studentFormRef" :model="form1" :rules="rules1" label-width="80px">
         <el-form-item label="训练队名" prop="studentId">
-          <el-select v-model="form1.studentId" multiple @remove-tag="delTag" filterable placeholder="请选择" style="width: 100%;">
+          <el-select v-model="form1.studentId" multiple filterable placeholder="请选择" style="width: 100%;" clearable>
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button :loading="buttonLoading" type="primary" @click="submit">确 定</el-button>
           <el-button @click="isShow=false">取 消</el-button>
+          <el-button :loading="buttonLoading" type="primary" @click="submit">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -89,7 +89,7 @@
 
 <script setup name="TrainingTeam" lang="ts">
 import { listStudentInfo } from '@/api/system/studentInfo';
-import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam,containtStudent, delStundetId } from '@/api/teacher/trainingTeam';
+import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam, PostStundetId } from '@/api/teacher/trainingTeam';
 import { TrainingTeamVO, TrainingTeamQuery, TrainingTeamForm } from '@/api/teacher/trainingTeam/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -150,10 +150,10 @@ const getList = async () => {
   total.value = res.total;
   loading.value = false;
 }
-const delTag = async(tagValue:string | number) =>{
-  const res =await delStundetId(tagValue)
-  console.log(res)
-}
+// const delTag = async(tagValue:string | number) =>{
+//   const res =await delStundetId({tagValue})
+//   // console.log(res)
+// }
 /** 取消按钮 */
 const cancel = () => {
   reset();
@@ -171,22 +171,23 @@ const form1 = ref({
   trainingTeamId:""
 })
 const options = ref()
-const handleStudent = async(row) =>{
+const handleStudent = async(row:any) =>{
     form1.value.trainingTeamId=row.id
     const _id = row?.id
     const res =await listStudentInfo({pageNum:1,pageSize:9999})
   const result = await getTrainingTeam(_id);
   if(result.data.studentList){
-   form1.value.studentId = result.data.studentList.map(item=>item.id)}else{
+   form1.value.studentId = result.data.studentList.map((item:any)=>item.id)}
+   else{
     form1.value.studentId=[]
    }
-     options.value=res.rows.map((item)=>{return{value:item.id,label:item.name}})
+     options.value=res.rows.map((item:any)=>{return{value:item.id,label:item.name}})
      isShow.value=true
   }
   const submit = async() =>{
-    studentFormRef.value.validate(async(valid)=>{
+    studentFormRef.value.validate(async(valid:boolean)=>{
      if(valid){
-      const res =await containtStudent(form1.value)
+      const res =await PostStundetId(form1.value)
       console.log(res)
       isShow.value=false
       await getList();
