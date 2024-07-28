@@ -129,11 +129,12 @@ onBeforeUnmount(()=>{
       <p>{{ list?.teacherName}}</p>
       <el-form>
         <el-form-item label="运动类型" style="margin-bottom: -3px">
-          <el-select v-model="list.exerciseTypeName">
+          <el-select v-model="list.exerciseTypeName" disabled>
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
+
       <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
         <!-- <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button> -->

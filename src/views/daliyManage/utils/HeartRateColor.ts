@@ -1,5 +1,5 @@
 // 心率颜色变化
-export const getHeartRateColor = (heartRate) => {
+export const getHeartRateColor = (heartRate: number) => {
   if (heartRate >= 40 && heartRate <= 150) {
     return 'green'; // 绿色
   } else if (heartRate > 150 && heartRate <= 180) {
@@ -14,13 +14,13 @@ export const getHeartRateColor = (heartRate) => {
 };
 
 // 电池块显示
-export const findInterval = (num) => {
+export const findInterval = (num: number) => {
   const intervalSize = 100 / 5;
   const interval = Math.floor(num / intervalSize);
   return interval === 5 ? interval : interval + 1;
 };
 // 电量颜色计算
-export const getBatteryColor = (num) => {
+export const getBatteryColor = (num: number) => {
   const interval = findInterval(num);
   if (interval >= 0 && interval <= 1) {
     return '#FE5F69';
