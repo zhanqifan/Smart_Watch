@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getTrainId } from '@/api/daliyManage';
 import { addTeamResponse } from '@/types/daliyManage';
-import { startAtOneButton,resetWatch } from '@/api/daliyManage';
+import { startAtOneButton } from '@/api/daliyManage';
 import TrainState from '@/store/modules/train';
-// import { getHeartRateColor,findInterval,getBatteryColor } from '../../utils/HeartRateColor';
+import { getHeartRateColor,findInterval,getBatteryColor } from '../../utils/HeartRateColor';
 const options = [
   {
     value: '100',
@@ -24,10 +24,9 @@ const props=defineProps<{
   taskId:any
 }>()
 const router = useRouter()
-const list =ref<addTeamResponse>({}) //学生运动实时信息
+const list =ref<addTeamResponse>({} as addTeamResponse) //学生运动实时信息
 const intervalId =ref<number|null>(null)//定时器id
-// 存储暂停的学生ID
-const pausedStudents = ref<number[]>([]);
+
 const watchOnline = ref({
   braceletsOnlineNum:0,
   braceletsTotalNum:0
@@ -50,16 +49,13 @@ const startInterval = async () => {
   if (intervalId.value !== null) {
     clearInterval(intervalId.value); // 避免多次启动定时器
   }
-  let number = 0;
+   let number = 0;
     intervalId.value = setInterval(async () => {
-    const studentIds = list.value.students.filter(
-      (studentId) => !pausedStudents.value.includes(studentId)
-    );
+    const studentIds = list.value?.students
     const res = await startAtOneButton({...startParams.value,studentIds,number:number++});
-    console.log(res);
     // 处理手环掉线  处理方法:只替换有返回的部分
-    res.data.taskHealthMetricsVoList.forEach((newData) => {
-      const existingData = list.value.studentInfoList.find(
+    res.data.taskHealthMetricsVoList.forEach((newData:any) => {
+      const existingData = list.value?.studentInfoList.find(
         (item) => item.studentId === newData.studentId
       );
       if (existingData) {
@@ -78,9 +74,8 @@ const startInterval = async () => {
   });
 };
 // 结束定时器
-const stopInterval = (control:boolean) => {
+const stopInterval = () => {
   if (intervalId.value !== null) {
-      control?pausedStudents.value=[]:false//结束则情况储存暂停学生的id
     clearInterval(intervalId.value);
     intervalId.value = null;
     btnShow.value=true
@@ -95,54 +90,14 @@ const stopInterval = (control:boolean) => {
     }
   })
   trainState.changeState(true)
-    reset()
   }
 };
+// 一键开始
 const open = () =>{
     startParams.value.isRecord=true
     btnShow.value=false
 }
-const getHeartRateColor = (heartRate) => {
-  if (heartRate >= 40 && heartRate <= 150) {
-    return 'green'; // 绿色
-  } else if (heartRate > 150 && heartRate <= 180) {
-    return 'yellow'; // 黄色
-  } else if (heartRate > 180) {
-    return 'red'; // 红色
-  } else if (heartRate <= 40 || heartRate >= 200) {
-    return 'purple'; // 紫色
-  } else {
-    return ''; // 默认样式
-  }
-};
-// // 电池块显示
-const findInterval = (num: number) => {
-  const intervalSize = 100 / 5;
-  const interval = Math.floor(num / intervalSize);
-  return interval === 5 ? interval : interval + 1;
-};
-// 电量颜色计算
-const getBatteryColor = (num: number) => {
-  const interval = findInterval(num);
-  if (interval >= 0 && interval <= 1) {
-    return '#FE5F69';
-  } else if (interval > 1 && interval <= 4) {
-    return '#FFC95C';
-  } else {
-    return '#64BA8C';
-  }
-};
 
-// 重置
-const reset  = async() =>{
-  if(intervalId){
-    stopInterval(false)
-  }
-  pausedStudents.value=[]//清空
-  const res =await resetWatch(props.taskId)
-  console.log(res)
-  getTrainList()//初始化数据
-}
 
 const screenWidth = ref(window.innerWidth);
 
@@ -162,7 +117,7 @@ onMounted(()=>{
   getTrainList()
   startInterval()
 })
-// 防住没结束定时器就刷新页面
+// 防止没结束定时器就刷新页面
 onBeforeUnmount(()=>{
   clearInterval(intervalId.value as number);
     intervalId.value = null;
@@ -183,7 +138,7 @@ onBeforeUnmount(()=>{
       <div>
         <!-- <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button> -->
         <el-button type="primary" v-show="btnShow" size="large" @click="open">一键开始</el-button>
-        <el-button type="danger" v-show="!btnShow" size="large" @click="stopInterval(true)">一键结束</el-button>
+        <el-button type="danger" v-show="!btnShow" size="large" @click="stopInterval">一键结束</el-button>
         <!-- <el-button type="primary" size="large" @click="reset">重置</el-button> -->
       </div>
     </div>

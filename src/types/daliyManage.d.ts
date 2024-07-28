@@ -58,6 +58,7 @@ interface studenList {
   number: number;
   studentId: number;
   studentName: string;
+  battery: number;
   taskId: number;
   timestamp: Date;
   totalCalories: number;

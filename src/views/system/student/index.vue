@@ -112,7 +112,7 @@ const multiple = ref(true);
 const total = ref(0);
 const excelList = ref({
   excelTemplate:'/teacher/studentInfo/importTemplate',//excel获取导入模板
-  excelImport:'http://localhost/dev-api/teacher/studentInfo/importData'//excel导入接口
+  excelImport:import.meta.env.VITE_APP_BASE_API+'/teacher/studentInfo/importData'//excel导入接口
 })
 const queryFormRef = ref<ElFormInstance>();
 const studentInfoFormRef = ref<ElFormInstance>();

@@ -47,7 +47,7 @@ const rules = reactive({
 
 })
 const handleSend = ()=>{
-    formRef.value.validate(async(valid)=>{
+    formRef.value.validate(async(valid:boolean)=>{
 
       if(valid){
         dialogRef.value.load(true)
