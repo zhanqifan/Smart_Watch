@@ -70,3 +70,10 @@ export const containtStudent = (data: any) => {
     data
   });
 };
+
+export const delStundetId = (studentId: string | number) => {
+  return request({
+    url: `/teacher/studentInfo/${studentId}`,
+    method: 'delete'
+  });
+};

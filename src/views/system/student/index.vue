@@ -50,10 +50,10 @@
 
       <el-table v-loading="loading" :data="studentInfoList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="学生ID" align="center" prop="id" v-if="true" />
+        <!-- <el-table-column label="学生ID" align="center" prop="id" v-if="true" /> -->
         <el-table-column label="学生姓名" align="center" prop="name" />
         <el-table-column label="手环ID" align="center" prop="uuid" />
-        <el-table-column label="学号" align="center" prop="studentNumber" />
+        <el-table-column label="家长手机号" align="center" prop="phonenumber" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
@@ -76,6 +76,9 @@
         </el-form-item>
         <el-form-item label="手环ID" prop="uuid">
           <el-input v-model="form.uuid" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="电话号码" prop="phonenumber">
+          <el-input v-model="form.phonenumber" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="学号" prop="studentNumber">
           <el-input v-model="form.studentNumber" placeholder="请输入" />
@@ -108,8 +111,8 @@ const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
 const excelList = ref({
-  excelTemplate:import.meta.env.VITE_APP_BASE_API+'/teacher/studentInfo/importTemplate',//excel获取导入模板
-  excelImport:import.meta.env.VITE_APP_BASE_API +'/teacher/studentInfo/importData'//excel导入接口
+  excelTemplate:'/teacher/studentInfo/importTemplate',//excel获取导入模板
+  excelImport:'http://localhost/dev-api/teacher/studentInfo/importData'//excel导入接口
 })
 const queryFormRef = ref<ElFormInstance>();
 const studentInfoFormRef = ref<ElFormInstance>();
@@ -149,6 +152,9 @@ const data = reactive<PageData<StudentInfoForm, StudentInfoQuery>>({
     studentNumber: [
       { required: true, message: "不能为空", trigger: "blur" }
     ],
+    phonenumber:[
+    { required: true, message: "不能为空", trigger: "blur" }
+    ]
   }
 });
 

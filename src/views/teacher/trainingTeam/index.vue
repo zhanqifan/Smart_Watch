@@ -72,7 +72,7 @@
     <el-dialog title="绑定学生" v-model="isShow">
       <el-form ref="studentFormRef" :model="form1" :rules="rules1" label-width="80px">
         <el-form-item label="训练队名" prop="studentId">
-          <el-select v-model="form1.studentId" multiple filterable placeholder="请选择" style="width: 100%;">
+          <el-select v-model="form1.studentId" multiple @remove-tag="delTag" filterable placeholder="请选择" style="width: 100%;">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
@@ -89,7 +89,7 @@
 
 <script setup name="TrainingTeam" lang="ts">
 import { listStudentInfo } from '@/api/system/studentInfo';
-import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam,containtStudent } from '@/api/teacher/trainingTeam';
+import { listTrainingTeam, getTrainingTeam, delTrainingTeam, addTrainingTeam, updateTrainingTeam,containtStudent, delStundetId } from '@/api/teacher/trainingTeam';
 import { TrainingTeamVO, TrainingTeamQuery, TrainingTeamForm } from '@/api/teacher/trainingTeam/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -150,7 +150,10 @@ const getList = async () => {
   total.value = res.total;
   loading.value = false;
 }
-
+const delTag = async(tagValue:string | number) =>{
+  const res =await delStundetId(tagValue)
+  console.log(res)
+}
 /** 取消按钮 */
 const cancel = () => {
   reset();

@@ -91,7 +91,7 @@ const tenantEnabled = ref(true);
 
 // 注册开关
 const register = ref(false);
-const redirect = ref(undefined);
+const redirect = ref('/daliysportmenu/actualsport');
 const loginRef = ref<ElFormInstance>();
 // 租户列表
 const tenantList = ref<TenantVO[]>([]);
@@ -120,7 +120,7 @@ const handleLogin = () => {
       // 调用action的登录方法
       const [err] = await to(userStore.login(loginForm.value));
       if (!err) {
-        await router.push({ path: redirect.value || '/' });
+        await router.push({ path: '/daliysportmenu/actualsport' });
         loading.value = false;
       } else {
         loading.value = false;

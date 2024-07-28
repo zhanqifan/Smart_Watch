@@ -64,9 +64,9 @@ export const constantRoutes: RouteOption[] = [
     hidden: true
   },
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: '/daliysportmenu/daliysport',
+    redirect: '/daliysportmenu/daliysport'
     // children: [
     //   {
     //     path: '/daliysportmenu/daliysport',

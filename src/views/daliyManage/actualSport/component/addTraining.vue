@@ -70,24 +70,24 @@ const handleSend = ()=>{
 </script>
 <template>
   <div>
-  <el-button type="primary" :icon="Plus" class="btn" round @click="addTraining" @Upactuall="handleActuall">添加训练</el-button>
-  <RenderDialog :title="'添加训练'" ref="dialogRef" @send="handleSend">
-    <el-form ref="formRef" style="max-width: 600px" :model="sportForm" :rules="rules" label-width="auto" class="ruleForm">
-      <el-form-item label="训练队" prop="trainingTeamId">
-        <el-select v-model="sportForm.trainingTeamId"  placeholder="请选择" size="large" style="width: 100%;">
-          <el-option v-for="item in options" :key="item.trainingTeamId" :label="item.trainingTeamName" :value="item.trainingTeamId" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="运动类型" prop="exerciseTypeName">
-        <el-select v-model="sportForm.exerciseTypeName"   placeholder="请选择" size="large" style="width: 100%;">
-          <el-option v-for="item in options1" :key="item.value" :label="item.exerciseTypeName" :value="item.exerciseTypeId" />
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item label="组数" prop="number">
+    <el-button type="primary" :icon="Plus" class="btn" round @click="addTraining" @Upactuall="handleActuall">添加训练</el-button>
+    <RenderDialog :title="'添加训练'" ref="dialogRef" @send="handleSend">
+      <el-form ref="formRef" style="max-width: 600px" :model="sportForm" :rules="rules" label-width="auto" class="ruleForm">
+        <el-form-item label="训练队" prop="trainingTeamId">
+          <el-select v-model="sportForm.trainingTeamId" placeholder="请选择" size="large" style="width: 100%;">
+            <el-option v-for="item in options" :key="item.trainingTeamId" :label="item.trainingTeamName" :value="item.trainingTeamId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="运动类型" prop="exerciseTypeName">
+          <el-select v-model="sportForm.exerciseTypeName" placeholder="请选择" size="large" style="width: 100%;">
+            <el-option v-for="item in options1" :key="item.value" :label="item.exerciseTypeName" :value="item.exerciseTypeId" />
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item label="组数" prop="number">
         <el-input v-model.number="sportForm.number" placeholder="请输入运动次数"></el-input>
       </el-form-item> -->
-    </el-form>
-  </RenderDialog>
+      </el-form>
+    </RenderDialog>
   </div>
 </template>
 
