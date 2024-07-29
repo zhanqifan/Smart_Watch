@@ -4,21 +4,7 @@ import { addTeamResponse } from '@/types/daliyManage';
 import { startAtOneButton } from '@/api/daliyManage';
 import TrainState from '@/store/modules/train';
 import { getHeartRateColor,findInterval,getBatteryColor } from '../../utils/HeartRateColor';
-const options = [
-  {
-    value: '100',
-    label: '100米',
-  },
-  {
-    value: '200',
-    label: '200米',
-  },
-  {
-    value: '300',
-    label: '300米',
-  },
 
-]
 const trainState= TrainState()
 const props=defineProps<{
   taskId:any
@@ -38,7 +24,7 @@ const getTrainList =async() =>{
   const res =await getTrainId(props.taskId)
   list.value =res.data
 }
-const btnShow =ref(true)
+const btnShow =ref(true)//开关状态
 const startParams = ref({
       taskId: props.taskId,
       studentIds: "",
@@ -127,15 +113,17 @@ onBeforeUnmount(()=>{
   <div>
     <div class="User">
       <p>{{ list?.teacherName}}</p>
-      <el-form>
-        <el-form-item label="运动类型" style="margin-bottom: -3px">
+        <div class="flex">
+        <img src="@/assets/images/build.png" alt="">
+           <span> 运动类型</span>
           <el-select v-model="list.exerciseTypeName" disabled>
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-        </el-form-item>
-      </el-form>
-
-      <p>手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
+      </div>
+      <p class="flex">
+        <img style="width:25px;height: 25px" src="@/assets/images/clock.png" alt="">
+        训练时间：00:14′00″</p>
+      <p class="flex"><img style="width:25px;height: 25px" src="@/assets/images/watch.png" alt="">
+        手环链接{{watchOnline.braceletsOnlineNum}}/{{ watchOnline.braceletsTotalNum }}</p>
       <div>
         <!-- <el-button type="primary" size="large" @click="stopInterval(false)">一键暂停</el-button> -->
         <el-button type="primary" v-show="btnShow" size="large" @click="open">一键开始</el-button>
@@ -178,6 +166,11 @@ onBeforeUnmount(()=>{
   font-size: 18px;
   font-weight: 500;
   justify-content: space-around;
+  .flex{
+    display: flex;
+    align-items: center;
+  }
+
 }
 
 :deep(.el-form-item--default .el-form-item__label) {
