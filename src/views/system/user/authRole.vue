@@ -1,7 +1,6 @@
 <template>
-  <div class="p-2">
-    <div class="panel">
-      <h4 class="panel-title">基本信息</h4>
+  <div>
+    <div class="pt-0.5">
       <el-form :model="form" label-width="80px" :inline="true">
         <el-row :gutter="10">
           <el-col :span="2.5">
@@ -17,8 +16,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="panel">
-      <h4 class="panel-title">角色信息</h4>
+    <div>
       <div>
         <el-table
           v-loading="loading"

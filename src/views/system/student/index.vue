@@ -28,7 +28,7 @@
       <template #header>
         <el-row :gutter="10">
           <el-col :span="1.5">
-            <el-button type="primary" plain icon="Plus" @click="handleAdd" v-hasPermi="['system:studentInfo:add']">新增</el-button>
+            <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
           </el-col>
           <!-- <el-col :span="1.5">
             <el-button type="success" plain icon="Edit" :disabled="single" @click="handleUpdate()" v-hasPermi="['system:studentInfo:edit']"
@@ -41,7 +41,7 @@
             >
           </el-col> -->
           <el-col :span="1.5">
-            <el-button type="warning" plain icon="Download" @click="handleExport" v-hasPermi="['system:studentInfo:export']">导出</el-button>
+            <el-button type="warning" plain icon="Download" @click="handleExport">导出</el-button>
             <el-button plain icon="Upload" @click="hanldeExcelImport">导入</el-button>
           </el-col>
           <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
@@ -50,17 +50,17 @@
 
       <el-table v-loading="loading" :data="studentInfoList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <!-- <el-table-column label="学生ID" align="center" prop="id" v-if="true" /> -->
+        <el-table-column label="学生ID" align="center" width="150" prop="id" />
         <el-table-column label="学生姓名" align="center" prop="name" />
         <el-table-column label="手环ID" align="center" prop="uuid" />
         <el-table-column label="家长手机号" align="center" prop="phonenumber" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template #default="scope">
             <el-tooltip content="修改" placement="top">
-              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:studentInfo:edit']"></el-button>
+              <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip content="删除" placement="top">
-              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:studentInfo:remove']"></el-button>
+              <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
