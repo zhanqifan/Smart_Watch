@@ -50,7 +50,7 @@
 
       <el-table v-loading="loading" :data="studentInfoList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="学生ID" align="center" width="150" prop="id" />
+        <el-table-column label="学号" align="center" width="150" prop="studentNumber" />
         <el-table-column label="学生姓名" align="center" prop="name" />
         <el-table-column label="手环ID" align="center" prop="uuid" />
         <el-table-column label="家长手机号" align="center" prop="phonenumber" />
